@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import Application from '#/components/Application'
 import * as serviceWorker from './serviceWorker'
 import './global.scss'
 
 const wrapper = document.getElementById('root')
-const rootElement = <App />
+const rootElement = <Application />
 
 ReactDOM.render(rootElement, wrapper)
 
