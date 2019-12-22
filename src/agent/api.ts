@@ -1,7 +1,18 @@
-export const hostname = ''
+export const PRODUCTION_MODE = process.env.NODE_ENV === 'production'
+export const DEV_MODE = process.env.NODE_ENV === 'development'
 
-const getUrl = (route: string) => `${hostname}/${route}`
+const proxy = 'http://5.101.181.94:7999'
+const hostname = 'https://mucpoll.a6raywa1cher.com/mucpoll-spring'
 
-export default {
-  register: getUrl('register')
+const getUrl = (route: string) => {
+  if (DEV_MODE) {
+    return `${proxy}/${hostname}/${route}`
+  }
+  return `${hostname}/${route}`
 }
+
+export const apiRoutes = {
+  authorize: getUrl(`user/cookies`)
+}
+
+export default apiRoutes

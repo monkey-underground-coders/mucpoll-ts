@@ -1,8 +1,11 @@
 import { Action } from '#/store/types'
 
-export type CreateReducerReducer<T, A> = (state: T, action: A) => T
-export type CreateReducerComponents<T, A> = Record<string, CreateReducerReducer<T, A>>
-export const createReducer = <T, A extends Action>(components: CreateReducerComponents<T, A>, initialState: T) => (
-  state: T = initialState,
+export type CreateReducerReducer<S, A> = (state: S, action: A) => S
+export type CreateReducerComponents<S, A> = Record<string, CreateReducerReducer<S, A>>
+export const createReducer = <S, A extends Action>(components: CreateReducerComponents<S, A>, initialState: S) => (
+  state: S = initialState,
   action: A
 ) => (components.hasOwnProperty(action.type) ? components[action.type](state, action) : state)
+
+
+

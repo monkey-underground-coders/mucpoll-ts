@@ -1,0 +1,11 @@
+.auth {
+  background: rgb(230, 242, 255);
+  height: 100%;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: inherit;
+  }
+}

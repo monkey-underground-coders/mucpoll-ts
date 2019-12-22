@@ -120,7 +120,10 @@ module.exports = function(webpackEnv) {
         {
           loader: require.resolve(preProcessor),
           options: {
-            sourceMap: true
+            sourceMap: true,
+            sassOptions: {
+              includePaths: [paths.appSrc]
+            }
           }
         }
       )
@@ -277,6 +280,7 @@ module.exports = function(webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         '#': paths.appSrc,
+        assets: 'src/assets',
         'react-native': 'react-native-web',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {

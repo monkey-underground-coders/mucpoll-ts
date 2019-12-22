@@ -6,7 +6,8 @@ enum ActionPrefixes {
 
 export const ActionTypes = {
   USER: {
-    LOGOUT: `${ActionPrefixes.user}/LOGOUT`
+    LOGOUT: `${ActionPrefixes.user}/LOGOUT`,
+    AUTH: `${ActionPrefixes.user}/AUTH`
   }
 }
 

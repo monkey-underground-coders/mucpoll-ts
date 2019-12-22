@@ -13,6 +13,12 @@ export const userReducer = createReducer<UserState, Action>(
     [ActionTypes.USER.LOGOUT]: (state: UserState, action: any) => ({
       ...initialState,
       token: null
+    }),
+
+    // Successful authorization
+    [ActionTypes.USER.AUTH]: (state: UserState, action: any) => ({
+      ...initialState,
+      token: action.payload.token
     })
   },
   initialState

@@ -1,25 +1,24 @@
+// Sailec
 @font-face {
-  font-family: sfprodisplay;
-  src: url('#/assets/fonts/sfprodisplay/SFProDisplay-Regular.woff');
+  font-family: Sailec;
+  src: url('./assets/Sailec/Sailec-Regular.otf');
   font-weight: 400;
 }
 
 @font-face {
-  font-family: sfprodisplay;
-  src: url('#/assets/fonts/sfprodisplay/SFProDisplay-Medium.woff');
+  font-family: Sailec;
+  src: url('./assets/Sailec/Sailec-Medium.otf');
   font-weight: 500;
 }
 
 @font-face {
-  font-family: sfprodisplay;
-  src: url('#/assets/fonts/sfprodisplay/SFProDisplay-Semibold.woff');
-  font-weight: 600;
+  font-family: Sailec;
+  src: url('./assets/Sailec/Sailec-Bold.otf');
+  font-weight: 700;
 }
 
-@font-face {
-  font-family: sfprodisplay;
-  src: url('#/assets/fonts/sfprodisplay/SFProDisplay-Bold.woff');
-  font-weight: 700;
+#root {
+  height: 100%;
 }
 
 body {
@@ -29,5 +28,28 @@ body {
   overflow: hidden;
   position: fixed;
   background: #e5e5e5;
-  font-family: 'sfprodisplay', sans-serif;
+  min-height: 100vh;
+  font-family: 'Sailec', sans-serif;
+}
+
+.btn-rounded {
+  min-width: 160px;
+  height: 50px;
+  border-radius: 25px;
+
+  &.btn-success {
+    background-color: #57b846;
+    border-color: #57b846;
+  }
+}
+
+.btn-text-link {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #999;
+
+  &:hover {
+    color: #57b846;
+    text-decoration: none;
+  }
 }
