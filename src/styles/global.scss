@@ -1,19 +1,19 @@
 // Sailec
 @font-face {
   font-family: Sailec;
-  src: url('./assets/Sailec/Sailec-Regular.otf');
+  src: url('../assets/Sailec/Sailec-Regular.otf');
   font-weight: 400;
 }
 
 @font-face {
   font-family: Sailec;
-  src: url('./assets/Sailec/Sailec-Medium.otf');
+  src: url('../assets/Sailec/Sailec-Medium.otf');
   font-weight: 500;
 }
 
 @font-face {
   font-family: Sailec;
-  src: url('./assets/Sailec/Sailec-Bold.otf');
+  src: url('../assets/Sailec/Sailec-Bold.otf');
   font-weight: 700;
 }
 
@@ -24,6 +24,7 @@
 body {
   height: 100%;
   color: #0d0906;
+  color: #24292e;
   width: 100%;
   overflow: hidden;
   position: fixed;
