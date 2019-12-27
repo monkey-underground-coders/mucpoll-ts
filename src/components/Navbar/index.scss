@@ -1,0 +1,70 @@
+@import '#/styles/mixins.scss';
+
+nav.navbar {
+  .navbar-brand {
+    display: flex;
+    flex-direction: revert;
+    align-items: center;
+
+    span {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+  }
+
+  .nav-item {
+    @include respond-from(md) {
+      &:not(:first-child) {
+        margin-left: 25px;
+      }
+    }
+
+    .nav-link {
+      text-transform: uppercase;
+      font-weight: 500;
+      position: relative;
+
+      span::after {
+        content: ' ';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        left: 0;
+        background: transparent;
+        transition: 0.2s;
+        bottom: 0;
+
+        @include respond-from(md) {
+          bottom: -25px;
+        }
+      }
+    }
+  }
+
+  .collapse {
+    @include respond-from(lg) {
+      margin-left: 100px;
+    }
+  }
+
+  // Theming
+  &.navbar-light {
+    .navbar-brand span {
+      color: #353535;
+    }
+
+    .nav-item {
+      .nav-link {
+        color: #353535;
+      }
+
+      .nav-link.active {
+        color: #56b0e0;
+
+        span::after {
+          background: #56b0e0;
+        }
+      }
+    }
+  }
+}
