@@ -12,8 +12,8 @@ interface ApplicationProps {}
 const Application = (props: ApplicationProps) => {
   const applicationRoutes = (
     <Switch>
-      <Route path="/" component={MainScene} exact={true} />
-      <Route path="/guest" component={GuestScene} />
+      <Route path="/" component={GuestScene} exact={true} />
+      <Route path="/cabinet" component={MainScene} />
       <Route path="/auth" component={AuthScene} />
     </Switch>
   )
