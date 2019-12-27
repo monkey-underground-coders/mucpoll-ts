@@ -1,13 +1,25 @@
 import React from 'react'
-import { RouteComponentProps, Switch, Route } from 'react-router'
-import './index.scss'
+import { RouteComponentProps, Switch, Route, Redirect, withRouter } from 'react-router'
 import Page from '#/components/Page'
 import SignIn from './components/SignIn'
+import SignUp from './components/SignUp'
+import userSelectors from '#/store/selectors/user'
+import { connect } from 'react-redux'
+import { StoreRootState } from '#/store/types'
+import './index.scss'
 
-interface AuthSceneProps extends RouteComponentProps {}
+interface AuthSceneProps extends RouteComponentProps {
+  authenticated: boolean | null
+}
 
 const AuthScene = (props: AuthSceneProps) => {
   const { match } = props
+
+  // Block authentication if authenticated user attempts
+  // to visit authentication page
+  if (props.authenticated) {
+    return <Redirect to="/cabinet" />
+  }
 
   return (
     <div className="auth">
@@ -21,11 +33,28 @@ const AuthScene = (props: AuthSceneProps) => {
                 <SignIn {...props} />
               </Page>
             )}
-          ></Route>
+          />
+
+          <Route
+            path={`${match.url}/signup`}
+            exact={true}
+            render={props => (
+              <Page title="Register">
+                <SignUp {...props} />
+              </Page>
+            )}
+          />
         </Switch>
       </div>
     </div>
   )
 }
 
-export default AuthScene
+export default withRouter(
+  connect(
+    (store: StoreRootState) => ({
+      authenticated: userSelectors.isAuthenticated(store, null)
+    }),
+    {}
+  )(AuthScene)
+)

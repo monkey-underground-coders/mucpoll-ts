@@ -1,14 +1,11 @@
 import React, { FormEvent } from 'react'
 import './index.scss'
-import { Link, withRouter, Redirect } from 'react-router-dom'
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import apiRoutes from '#/agent/api'
 import { connect } from 'react-redux'
-import { StoreRootState } from '#/store/types'
 import { authorize } from '#/store/actions/user'
-import userSelectors from '#/store/selectors/user'
 
-interface SignInProps {
-  authenticated: boolean | null
+interface SignInProps extends RouteComponentProps {
   authorize: any
 }
 
@@ -22,22 +19,16 @@ const SignIn = (props: SignInProps) => {
   const handleSignIn = (event: FormEvent) => {
     event.preventDefault()
     const { username, password } = formState
-
     const basicAuthToken = window.btoa(unescape(encodeURIComponent(`${username}:${password}`)))
     const headers = { Authorization: `Basic ${basicAuthToken}` }
     fetch(apiRoutes.authorize, { headers }).then((response: Response) => {
       if (response.status === 200) {
         props.authorize(basicAuthToken)
       } else if (response.status === 401) {
+        // TODO: Handle erroring
         alert('invalid data')
       }
     })
-  }
-
-  // Block authentication if authenticated user attempts
-  // to visit authentication page
-  if (props.authenticated) {
-    return <Redirect to="/" />
   }
 
   return (
@@ -97,12 +88,7 @@ const SignIn = (props: SignInProps) => {
 }
 
 export default withRouter(
-  connect(
-    (store: StoreRootState) => ({
-      authenticated: userSelectors.isAuthenticated(store, null)
-    }),
-    {
-      authorize
-    }
-  )(SignIn)
+  connect(null, {
+    authorize
+  })(SignIn)
 )
