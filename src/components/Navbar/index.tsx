@@ -1,6 +1,8 @@
 import React from 'react'
 import { Collapse, Navbar as RNavbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
+import { logout } from '#/store/actions/user'
+import { connect } from 'react-redux'
 import './index.scss'
 
 const NAVBAR_LINKS = [
@@ -21,11 +23,17 @@ const NAVBAR_LINKS = [
   }
 ]
 
-interface NavbarProps extends RouteComponentProps {}
+interface NavbarProps extends RouteComponentProps {
+  logout: () => Promise<any>
+}
 
 const Navbar = (props: NavbarProps) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const toggle = () => setIsOpen(!isOpen)
+
+  const handleSubmit = () => {
+    props.logout()
+  }
 
   const { pathname } = props.location
   const renderedLinks = NAVBAR_LINKS.map((link: { url: string; title: string; icon: string }) => (
@@ -48,12 +56,16 @@ const Navbar = (props: NavbarProps) => {
         <Nav className="mr-auto" navbar>
           {renderedLinks}
         </Nav>
-        {/* <NavLink href="https://github.com/reactstrap/reactstrap">
-          GitHub
-        </NavLink> */}
+        <Nav navbar>
+          <NavItem>
+            <NavLink tag={Link} onClick={handleSubmit}>
+              <span>Logout</span>
+            </NavLink>
+          </NavItem>
+        </Nav>
       </Collapse>
     </RNavbar>
   )
 }
 
-export default withRouter(Navbar)
+export default withRouter(connect(null, { logout })(Navbar))

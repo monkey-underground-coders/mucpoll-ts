@@ -3,8 +3,15 @@ import { createReducer } from '#/store/helpers'
 import ActionTypes from '#/store/actions'
 import { UserState } from '#/store/types'
 
+const loadStateFromLocalStorage = () => ({
+  token: (() => {
+    const t = window.localStorage.getItem('token')
+    return t ? JSON.parse(t) : null
+  })()
+})
+
 const initialState: UserState = {
-  token: null
+  ...loadStateFromLocalStorage()
 }
 
 export const userReducer = createReducer<UserState, Action>(

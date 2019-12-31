@@ -8,3 +8,11 @@ export const authorize = (token: string) => (dispatch: Dispatch, getState: () =>
     resolve()
   })
 }
+
+export const logout = () => (dispatch: Dispatch, getState: () => StoreRootState) => {
+  return new Promise((resolve, reject) => {
+    dispatch({ type: ActionTypes.USER.LOGOUT })
+    window.localStorage.clear()
+    resolve()
+  })
+}

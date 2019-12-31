@@ -1,12 +1,12 @@
 import React, { FormEvent } from 'react'
-import './index.scss'
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import apiRoutes from '#/agent/api'
 import { connect } from 'react-redux'
 import { authorize } from '#/store/actions/user'
+import './index.scss'
 
 interface SignInProps extends RouteComponentProps {
-  authorize: any
+  authorize: (token: string) => Promise<any>
 }
 
 const SignIn = (props: SignInProps) => {
@@ -22,8 +22,10 @@ const SignIn = (props: SignInProps) => {
     const basicAuthToken = window.btoa(unescape(encodeURIComponent(`${username}:${password}`)))
     const headers = { Authorization: `Basic ${basicAuthToken}` }
     fetch(apiRoutes.authorize, { headers }).then((response: Response) => {
-      if (response.status === 200) {
-        props.authorize(basicAuthToken)
+      if (response.ok) {
+        props.authorize(basicAuthToken).then(() => {
+          window.localStorage.setItem('token', JSON.stringify(basicAuthToken))
+        })
       } else if (response.status === 401) {
         // TODO: Handle erroring
         alert('invalid data')
