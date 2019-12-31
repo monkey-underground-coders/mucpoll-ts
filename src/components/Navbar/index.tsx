@@ -37,7 +37,7 @@ const Navbar = (props: NavbarProps) => {
 
   const { pathname } = props.location
   const renderedLinks = NAVBAR_LINKS.map((link: { url: string; title: string; icon: string }) => (
-    <NavItem>
+    <NavItem key={link.url}>
       <NavLink tag={Link} to={link.url} active={pathname === link.url}>
         <i className={link.icon} />
         <span className="ml-2">{link.title}</span>
@@ -58,7 +58,7 @@ const Navbar = (props: NavbarProps) => {
         </Nav>
         <Nav navbar>
           <NavItem>
-            <NavLink tag={Link} onClick={handleSubmit}>
+            <NavLink tag={Link} to="/auth/signin" onClick={handleSubmit}>
               <span>Logout</span>
             </NavLink>
           </NavItem>

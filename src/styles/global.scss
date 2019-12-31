@@ -17,6 +17,24 @@
   font-weight: 700;
 }
 
+@font-face {
+  font-family: sfprodisplay;
+  src: url('../assets/sfprodisplay/SFProDisplay-Regular.woff');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: sfprodisplay;
+  src: url('../assets/sfprodisplay/SFProDisplay-Medium.woff');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: sfprodisplay;
+  src: url('../assets/sfprodisplay/SFProDisplay-Bold.woff');
+  font-weight: 700;
+}
+
 #root {
   height: 100%;
 }
@@ -30,13 +48,18 @@ body {
   position: fixed;
   background: #e5e5e5;
   min-height: 100vh;
-  font-family: 'Sailec', sans-serif;
+  font-family: 'sfprodisplay', sans-serif;
+}
+
+.btn {
+  border-radius: 25px;
+  padding-left: 18px;
+  padding-right: 18px;
 }
 
 .btn-rounded {
   min-width: 160px;
   height: 50px;
-  border-radius: 25px;
 
   &.btn-success {
     background-color: #57b846;
