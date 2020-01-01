@@ -1,26 +1,18 @@
 import React from 'react'
 import VotingTemplateItem from './VotingTemplateItem'
+import './index.scss'
 
 interface VotingTemplatesProps {}
 
 const VotingTemplates = (props: VotingTemplatesProps) => {
   return (
-    <table className="table cabinet-items__table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>TITLE</th>
-          <th>TAGS</th>
-          <th>LAUNCHED</th>
-          <th>DATE</th>
-        </tr>
-      </thead>
-      <tbody>
-        {[...Array(10).keys()].map((item: any) => (
-          <VotingTemplateItem key={item} />
+    <div className="templates-list">
+      <div className="templates-list__inner">
+        {[...new Array(10).keys()].map((item: number) => (
+          <VotingTemplateItem />
         ))}
-      </tbody>
-    </table>
+      </div>
+    </div>
   )
 }
 

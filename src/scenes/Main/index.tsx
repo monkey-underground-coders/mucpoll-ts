@@ -22,7 +22,7 @@ const MainScene = (props: MainSceneProps) => {
 
   return (
     <div className="main">
-      <div className="main__inner">
+      <div className="main__inner container">
         <div className="navbar">
           <Navbar />
         </div>
