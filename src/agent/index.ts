@@ -1,15 +1,13 @@
 import store from '#/store'
 import _ from 'lodash'
+import { getAuthToken } from '#/store/selectors/user'
 
 export const constructGenericRequestHeaders = () => ({
   'Content-Type': 'application/json'
 })
 
-// TODO: place selector here
-const getAuthToken = () => ''
-
 export const constructRequestHeaders = (params = {}) => {
-  const authToken = getAuthToken()
+  const authToken = getAuthToken(store.getState() as any, null)
   return {
     ...constructGenericRequestHeaders(),
     ...(authToken ? { Authorization: `Basic ${authToken}` } : {}),
