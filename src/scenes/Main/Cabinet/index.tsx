@@ -1,7 +1,7 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router'
 import './index.scss'
-import VotingTemplates from './VotingTemplates'
+import PollTemplates from './PollTemplates'
 
 interface CabinetProps extends RouteComponentProps {}
 
@@ -21,7 +21,7 @@ const Cabinet = (props: CabinetProps) => {
         </div>
         <div className="cabinet-items">
           <div className="cabinet-items__inner">
-            <VotingTemplates />
+            <PollTemplates />
           </div>
         </div>
       </div>

@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { PollTemplateItemType } from '#/store/types'
 
-interface VotingTemplateItemProps {}
+interface PollTemplateItemProps extends PollTemplateItemType {}
 
-const VotingTemplateItem = (props: VotingTemplateItemProps) => {
+const PollTemplateItem = (props: PollTemplateItemProps) => {
   return (
     <div className="templates-list__item">
       <div className="templates-list__item__selection">
@@ -12,7 +13,7 @@ const VotingTemplateItem = (props: VotingTemplateItemProps) => {
         </div>
       </div>
       <div className="templates-list__item__general">
-        <div className="templates-list__item__general__name">What's the most popular programming language?</div>
+        <div className="templates-list__item__general__name">{props.name}</div>
         <div className="templates-list__item__general__info">
           <div className="templates-list__item__general__info__questions">
             <Link to="#">
@@ -59,4 +60,4 @@ const VotingTemplateItem = (props: VotingTemplateItemProps) => {
   )
 }
 
-export default VotingTemplateItem
+export default PollTemplateItem

@@ -12,7 +12,9 @@ const getUrl = (route: string) => {
 }
 
 export const apiRoutes = {
-  authorize: getUrl(`user/cookies`)
+  authorize: getUrl(`user/cookies`),
+
+  getPolls: getUrl(`poll/polls`)
 }
 
 export default apiRoutes
