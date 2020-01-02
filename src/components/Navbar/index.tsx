@@ -47,23 +47,30 @@ const Navbar = (props: NavbarProps) => {
 
   return (
     <RNavbar color="white" light expand="md">
-      <NavbarBrand tag={Link} to="/cabinet">
-        <img src="https://avatars3.githubusercontent.com/u/54907581?s=200&v=4" alt="logotype" width="50" height="50" />
-        <span className="ml-2">MUCPoll</span>
-      </NavbarBrand>
-      <NavbarToggler onClick={toggle} />
-      <Collapse isOpen={isOpen} navbar>
-        <Nav className="mr-auto" navbar>
-          {renderedLinks}
-        </Nav>
-        <Nav navbar>
-          <NavItem>
-            <NavLink tag={Link} to="/auth" onClick={handleSubmit}>
-              <span>Logout</span>
-            </NavLink>
-          </NavItem>
-        </Nav>
-      </Collapse>
+      <div className="container">
+        <NavbarBrand tag={Link} to="/cabinet">
+          <img
+            src="https://avatars3.githubusercontent.com/u/54907581?s=200&v=4"
+            alt="logotype"
+            width="50"
+            height="50"
+          />
+          <span className="ml-2">MUCPoll</span>
+        </NavbarBrand>
+        <NavbarToggler onClick={toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="mr-auto" navbar>
+            {renderedLinks}
+          </Nav>
+          <Nav navbar>
+            <NavItem>
+              <NavLink tag={Link} to="/auth" onClick={handleSubmit}>
+                <span>Logout</span>
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </Collapse>
+      </div>
     </RNavbar>
   )
 }

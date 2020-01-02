@@ -1,3 +1,5 @@
+@import '#/styles/mixins.scss';
+
 $voting-border: thin solid #e6e6e687;
 
 .templates-list {
@@ -12,6 +14,11 @@ $voting-border: thin solid #e6e6e687;
 
     &:not(:first-child) {
       margin-top: 0.925rem;
+    }
+
+    &__naming {
+      display: flex;
+      flex: 1 0 auto;
     }
 
     &__selection {
@@ -105,6 +112,38 @@ $voting-border: thin solid #e6e6e687;
           &:hover {
             opacity: 1;
           }
+        }
+      }
+    }
+
+    @include respond-to(md) {
+      &__naming {
+        flex-direction: column;
+        margin-left: 1rem;
+      }
+
+      &__info {
+        display: none;
+        margin-top: 0.5rem;
+        padding: 0;
+        justify-content: space-between;
+        border-right: none;
+      }
+
+      &__actions {
+        margin-top: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: flex-start;
+      }
+
+      &__general {
+        border-right: none;
+        padding-left: 0;
+        padding-right: 0;
+
+        &__name {
+          font-size: 1.05rem;
         }
       }
     }

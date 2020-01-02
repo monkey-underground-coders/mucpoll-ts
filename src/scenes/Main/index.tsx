@@ -22,12 +22,12 @@ const MainScene = (props: MainSceneProps) => {
 
   return (
     <div className="main">
-      <div className="main__inner container">
+      <div className="main__inner">
         <div className="navbar">
           <Navbar />
         </div>
 
-        <div className="layout">
+        <div className="layout container">
           <Switch>
             <Route
               path={`${match.url}`}
