@@ -18,13 +18,13 @@ export const userReducer = createReducer<UserState, Action>(
   {
     // Logout
     [ActionTypes.USER.LOGOUT]: (state: UserState, action: any) => ({
-      ...initialState,
+      ...state,
       token: null
     }),
 
     // Successful authorization
     [ActionTypes.USER.AUTH]: (state: UserState, action: any) => ({
-      ...initialState,
+      ...state,
       token: action.payload.token
     })
   },

@@ -19,6 +19,11 @@ export interface UserState {
   token: string | null
 }
 
+export interface PollState {
+  polls: Array<PollTemplateItemType>
+}
+
 export interface StoreRootState {
   user: UserState
+  poll: PollState
 }

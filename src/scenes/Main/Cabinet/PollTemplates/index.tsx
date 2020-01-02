@@ -1,23 +1,21 @@
 import React from 'react'
-import PollTemplateItem from './PollTemplateItem'
+import PollTemplateItem from '../../components/PollTemplateItem'
+import { PollTemplateItemType, StoreRootState } from '#/store/types'
+import { getPolls } from '#/store/actions/poll'
 import './index.scss'
-import apiRoutes from '#/agent/api'
-import { getRequest } from '#/agent'
-import { PollTemplateItemType } from '#/store/types'
+import { connect } from 'react-redux'
 
-interface PollTemplatesProps {}
+interface PollTemplatesProps {
+  polls: Array<PollTemplateItemType>
+  getPolls: () => Promise<any>
+}
 
 const PollTemplates = (props: PollTemplatesProps) => {
-  const [polls, setPolls] = React.useState([])
-
-  const getPolls = () => getRequest(apiRoutes.getPolls)
   React.useEffect(() => {
-    getPolls().then((json: any) => {
-      setPolls(json)
-    })
+    props.getPolls()
   }, [])
 
-  const renderedPolls = polls.map((poll: PollTemplateItemType) => (
+  const renderedPolls = props.polls.map((poll: PollTemplateItemType) => (
     <PollTemplateItem key={poll.id} questions={poll.questions} name={poll.name} id={poll.id} creator={poll.creator} />
   ))
 
@@ -28,4 +26,4 @@ const PollTemplates = (props: PollTemplatesProps) => {
   )
 }
 
-export default PollTemplates
+export default connect((store: StoreRootState) => ({ polls: store.poll.polls }), { getPolls })(PollTemplates)

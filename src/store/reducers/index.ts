@@ -1,6 +1,7 @@
 import { ActionTypes } from '#/store/actions'
 import { combineReducers, Action } from 'redux'
 import userReducer from '#/store/reducers/user'
+import pollReducer from '#/store/reducers/poll'
 import { StoreRootState } from '#/store/types'
 
 export const rootLevelReducer = (state: StoreRootState, action: Action) => {
@@ -10,7 +11,8 @@ export const rootLevelReducer = (state: StoreRootState, action: Action) => {
   }
 
   const topLevelReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    poll: pollReducer
   })
 
   return topLevelReducer(state as any, action)
