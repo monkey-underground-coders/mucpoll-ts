@@ -20,7 +20,11 @@ const SignIn = (props: SignInProps) => {
     event.preventDefault()
     const { username, password } = formState
     const basicAuthToken = window.btoa(unescape(encodeURIComponent(`${username}:${password}`)))
-    const headers = { Authorization: `Basic ${basicAuthToken}`, 'X-Requested-With': 'XMLHttpRequest' }
+    const headers = {
+      Authorization: `Basic ${basicAuthToken}`,
+      'X-Requested-With': 'XMLHttpRequest',
+      'access-control-allow-origin': 'https://mucpoll.a6raywa1cher.com'
+    }
     fetch(apiRoutes.authorize, { headers }).then((response: Response) => {
       if (response.ok) {
         props.authorize(basicAuthToken).then(() => {

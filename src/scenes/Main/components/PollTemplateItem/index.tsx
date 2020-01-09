@@ -2,7 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { PollTemplateItemType } from '#/store/types'
 
-interface PollTemplateItemProps extends PollTemplateItemType {}
+interface PollTemplateItemProps {
+  item: PollTemplateItemType
+}
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
   return (
@@ -15,7 +17,7 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
 
       <div className="templates-list__item__naming">
         <div className="templates-list__item__general">
-          <div className="templates-list__item__general__name">{props.name}</div>
+          <div className="templates-list__item__general__name">{props.item.name}</div>
           <div className="templates-list__item__general__info">
             <div className="templates-list__item__general__info__questions">
               <Link to="#">
@@ -34,7 +36,7 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
         <div className="templates-list__item__info">
           <div className="templates-list__item__info__launched">
             <div className="templates-list__item__info__caption">Launched</div>
-            <div className="templates-list__item__info__title">2 times</div>
+            <div className="templates-list__item__info__title">{props.item.launchedCount}</div>
           </div>
           <div className="templates-list__item__info__date">
             <div className="templates-list__item__info__caption">Created</div>

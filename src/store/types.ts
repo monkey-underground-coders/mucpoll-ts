@@ -13,6 +13,8 @@ export interface PollTemplateItemType {
     status: string
     username: string
   }
+  launchedCount: number
+  tags: Array<any>
 }
 
 export interface UserState {

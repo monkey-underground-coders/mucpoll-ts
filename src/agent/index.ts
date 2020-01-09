@@ -3,7 +3,8 @@ import _ from 'lodash'
 import { getAuthToken } from '#/store/selectors/user'
 
 export const constructGenericRequestHeaders = () => ({
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': 'https://mucpoll.a6raywa1cher.com'
 })
 
 export const constructRequestHeaders = (params = {}) => {

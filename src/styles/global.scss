@@ -41,14 +41,15 @@
 
 body {
   height: 100%;
-  color: #0d0906;
   color: #24292e;
   width: 100%;
-  overflow: hidden;
-  position: fixed;
   background: #e5e5e5;
   min-height: 100vh;
   font-family: 'sfprodisplay', sans-serif;
+}
+
+a {
+  outline: none !important;
 }
 
 .btn {

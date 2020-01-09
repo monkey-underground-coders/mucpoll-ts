@@ -15,9 +15,7 @@ const PollTemplates = (props: PollTemplatesProps) => {
     props.getPolls()
   }, [])
 
-  const renderedPolls = props.polls.map((poll: PollTemplateItemType) => (
-    <PollTemplateItem key={poll.id} questions={poll.questions} name={poll.name} id={poll.id} creator={poll.creator} />
-  ))
+  const renderedPolls = props.polls.map((poll: PollTemplateItemType) => <PollTemplateItem key={poll.id} item={poll} />)
 
   return (
     <div className="templates-list">

@@ -1,8 +1,5 @@
 import React, { FormEvent, ChangeEvent } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, FormGroup } from 'reactstrap'
-import { postRequest } from '#/agent'
-import apiRoutes from '#/agent/api'
-import { StoreRootState } from '#/store/types'
 import { connect } from 'react-redux'
 import { createPoll } from '#/store/actions/poll'
 
