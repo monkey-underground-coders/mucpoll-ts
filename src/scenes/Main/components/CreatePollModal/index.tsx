@@ -91,17 +91,19 @@ const CreatePollModal = (props: CreatePollModalProps) => {
       <ModalHeader toggle={props.toggleModal}>Create new Poll</ModalHeader>
       <form onSubmit={createPoll}>
         <ModalBody>
-          <FormGroup>
-            <label>Poll Title</label>
-            <input
-              type="text"
-              className="form-control"
-              value={pollTitle}
-              onChange={onTitleChange}
-              placeholder="Poll"
-              required
-            />
-          </FormGroup>
+          <div className="box box-bordered">
+            <div className="box__header">Poll title</div>
+            <div className="box__header">
+              <input
+                type="text"
+                className="form-control"
+                value={pollTitle}
+                onChange={onTitleChange}
+                placeholder="Poll"
+                required
+              />
+            </div>
+          </div>
 
           <div className="mt-2">
             <PollQuestionBare
