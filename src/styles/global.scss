@@ -82,3 +82,58 @@ a {
     text-decoration: none;
   }
 }
+
+.box {
+  position: relative;
+  border-top: 0;
+  margin-bottom: 20px;
+  width: 100%;
+  background: #fff;
+  border-radius: 4px;
+  padding: 0;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(97, 106, 120, 0.07);
+
+  &__header {
+    color: #455a64;
+    display: block;
+    padding: 0.8rem 1.25rem;
+    position: relative;
+    border-bottom: 1px solid rgba(97, 106, 120, 0.07);
+  }
+
+  &__body {
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    padding: 1.25rem;
+    border-radius: 0 0 0 0;
+    flex: 1 1 auto;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.btn-list {
+  background: transparent;
+  color: #93a2dd;
+  border: 0;
+  cursor: pointer;
+  -webkit-transition: opacity 0.2s ease-in;
+  transition: opacity 0.2s ease-in;
+  padding: 3px 6px;
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: none;
+}

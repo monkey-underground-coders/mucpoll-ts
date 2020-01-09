@@ -4,6 +4,15 @@ export interface Action {
 
 export type PrimaryKey = number
 
+export type PollQuestionItem = string
+
+export type QuestionHash = string
+export type QuestionTitle = string
+export type QuestionAnswerHash = string
+export type QuestionAnswerTitle = string
+export type QuestionContainerItem = { title: QuestionTitle; answers: Record<QuestionAnswerHash, QuestionAnswerTitle> }
+export type QuestionContainer = Record<QuestionHash, QuestionContainerItem>
+
 export interface PollTemplateItemType {
   id: PrimaryKey
   name: string

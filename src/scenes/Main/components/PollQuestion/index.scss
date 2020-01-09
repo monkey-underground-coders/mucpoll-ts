@@ -1,0 +1,41 @@
+.question-item {
+  &__layout {
+    &__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &__name {
+        flex: 1;
+      }
+
+      &__actions {
+        margin-left: 15px;
+      }
+    }
+
+    &__answers {
+      margin-top: 5px;
+
+      li::marker {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &__item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: 15px;
+
+        > div:first-child {
+          flex: 1;
+        }
+
+        > div:last-child {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
+}

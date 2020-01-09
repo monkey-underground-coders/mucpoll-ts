@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { StoreRootState } from '#/store/types'
 import userSelectors from '#/store/selectors/user'
 import './index.scss'
+import PollQuestionBare from './components/PollQuestionBare'
 
 interface MainSceneProps extends RouteComponentProps {
   authenticated: boolean | null
