@@ -2,12 +2,10 @@ import { Action } from 'redux'
 import { createReducer } from '#/store/helpers'
 import ActionTypes from '#/store/actions'
 import { UserState } from '#/store/types'
+import { getLocalStorageItem } from '#/utils/functions'
 
 const loadStateFromLocalStorage = () => ({
-  token: (() => {
-    const t = window.localStorage.getItem('token')
-    return t ? JSON.parse(t) : null
-  })()
+  token: getLocalStorageItem('token')
 })
 
 const initialState: UserState = {

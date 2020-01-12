@@ -42,7 +42,7 @@ declare module '*.webp' {
 declare module '*.svg' {
   import * as React from 'react'
 
-  export const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+  export const ReactComponent: React.anyComponent<React.SVGProps<SVGSVGElement>>
 
   const src: string
   export default src
@@ -61,4 +61,22 @@ declare module '*.module.scss' {
 declare module '*.module.sass' {
   const classes: { readonly [key: string]: string }
   export default classes
+}
+
+declare module 'react-websocket' {
+  export interface Props extends React.ComponentProps {
+    url: string
+    onMessage: any
+    onOpen?: any
+    onClose?: any
+    onError?: any
+    debug?: boolean
+    reconnect?: boolean
+    protocol?: string
+    reconnectIntervalInMilliSeconds?: number
+  }
+
+  const sendMessage: (a: any) => any
+
+  export default class Websocket extends React.Component<Props> {}
 }

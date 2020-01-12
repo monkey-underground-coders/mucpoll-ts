@@ -6,8 +6,9 @@ import Navbar from '#/components/Navbar'
 import { connect } from 'react-redux'
 import { StoreRootState } from '#/store/types'
 import userSelectors from '#/store/selectors/user'
+import Poller from './Poller'
 import './index.scss'
-import PollQuestionBare from './components/PollQuestionBare'
+import { wsRoutes } from '#/agent/api'
 
 interface MainSceneProps extends RouteComponentProps {
   authenticated: boolean | null
@@ -36,6 +37,15 @@ const MainScene = (props: MainSceneProps) => {
               render={props => (
                 <Page title="Polling panel">
                   <Cabinet {...props} />
+                </Page>
+              )}
+            />
+
+            <Route
+              path={`${match.url}/poll/:id`}
+              render={props => (
+                <Page title={`Poll #${props.match.params.id}`}>
+                  <Poller {...props} />
                 </Page>
               )}
             />

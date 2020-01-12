@@ -33,6 +33,8 @@ const SignIn = (props: SignInProps) => {
       if (response.ok) {
         props.authorize(basicAuthToken).then(() => {
           window.localStorage.setItem('token', JSON.stringify(basicAuthToken))
+          window.localStorage.setItem('username', JSON.stringify(username))
+          window.localStorage.setItem('password', JSON.stringify(password))
         })
       } else if (response.status === 401) {
         // TODO: Handle erroring

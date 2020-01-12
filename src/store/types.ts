@@ -13,6 +13,16 @@ export type QuestionAnswerTitle = string
 export type QuestionContainerItem = { title: QuestionTitle; answers: Record<QuestionAnswerHash, QuestionAnswerTitle> }
 export type QuestionContainer = Record<QuestionHash, QuestionContainerItem>
 
+export type AnswerSignature = { aid: number; count: number }
+export type AnswerOption = { answer: string; id: number; index: number; pollQuestion: number }
+export type Question = {
+  answerOptions: Array<AnswerOption>
+  id: number
+  index: number
+  poll: number
+  question: string
+}
+
 export interface PollTemplateItemType {
   id: PrimaryKey
   name: string
