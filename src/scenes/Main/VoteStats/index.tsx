@@ -56,7 +56,7 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
           <PaginationLink previous onClick={() => this.props.selectQuestion(this.props.currentIndex - 1)} />
         </PaginationItem>
         {[...new Array(this.props.questionCount).keys()].map((questionIndex: number) => (
-          <PaginationItem>
+          <PaginationItem key={questionIndex}>
             <PaginationLink onClick={() => this.props.selectQuestion(questionIndex)}>
               {questionIndex + 1}
             </PaginationLink>
