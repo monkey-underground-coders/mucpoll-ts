@@ -4,13 +4,18 @@ import apiRoutes from '#/agent/api'
 import { connect } from 'react-redux'
 import { authorize } from '#/store/actions/user'
 import './index.scss'
+import { string } from 'prop-types'
+import { generatebase64 } from '#/utils/functions'
 
 interface SignInProps extends RouteComponentProps {
   authorize: (token: string) => Promise<any>
 }
 
 const SignIn = (props: SignInProps) => {
-  const [formState, setFormState] = React.useState({ username: '', password: '' })
+  const [formState, setFormState] = React.useState<{ username: string; password: string }>({
+    username: '',
+    password: ''
+  })
 
   const changeFormState = (formField: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [formField]: event.target.value })
@@ -19,11 +24,10 @@ const SignIn = (props: SignInProps) => {
   const handleSignIn = (event: FormEvent) => {
     event.preventDefault()
     const { username, password } = formState
-    const basicAuthToken = window.btoa(unescape(encodeURIComponent(`${username}:${password}`)))
+    const basicAuthToken = generatebase64([username, password])
     const headers = {
       Authorization: `Basic ${basicAuthToken}`,
-      'X-Requested-With': 'XMLHttpRequest',
-      'access-control-allow-origin': 'https://mucpoll.a6raywa1cher.com'
+      'X-Requested-With': 'XMLHttpRequest'
     }
     fetch(apiRoutes.authorize, { headers }).then((response: Response) => {
       if (response.ok) {

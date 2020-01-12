@@ -28,7 +28,7 @@ interface NavbarProps extends RouteComponentProps {
 }
 
 const Navbar = (props: NavbarProps) => {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const toggle = () => setIsOpen(!isOpen)
 
   const handleSubmit = () => {

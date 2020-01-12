@@ -1,14 +1,13 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router'
-import './index.scss'
 import PollTemplates from './PollTemplates'
 import CreatePollModal from '../components/CreatePollModal'
+import './index.scss'
 
 interface CabinetProps extends RouteComponentProps {}
 
 const Cabinet = (props: CabinetProps) => {
-  const { match } = props
-  const [isCreatePollModalOpen, setCreatePollModalOpen] = React.useState(false)
+  const [isCreatePollModalOpen, setCreatePollModalOpen] = React.useState<boolean>(false)
 
   const toggleModal = () => {
     setCreatePollModalOpen(!isCreatePollModalOpen)

@@ -13,7 +13,7 @@ interface CreatePollModalProps {
 }
 
 const CreatePollModal = (props: CreatePollModalProps) => {
-  const [pollTitle, setPollTitle] = React.useState('')
+  const [pollTitle, setPollTitle] = React.useState<string>('')
   const [questions, setQuestions] = React.useState<QuestionContainer>({})
 
   const createPoll = (evt: FormEvent) => {
