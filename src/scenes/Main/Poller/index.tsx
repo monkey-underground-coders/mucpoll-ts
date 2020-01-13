@@ -84,29 +84,33 @@ class Poller extends React.Component<PollerProps, PollerState> {
     const decoded = stomp.getJson(msg)
     const live = decoded.open
     window.addEventListener('keydown', this.eventGoToOnline)
-    this.setState(
-      () => ({
-        exchangeStatus: !live ? ExchangeStatus.CLOSED : ExchangeStatus.SHOWING_LINK,
-        voteInfo: decoded
-      }),
-      () => {
-        !live && delete this.wsRef
-      }
-    )
+    if (live !== undefined) {
+      this.setState(
+        () => ({
+          exchangeStatus: !live ? ExchangeStatus.CLOSED : ExchangeStatus.SHOWING_LINK,
+          voteInfo: decoded
+        }),
+        () => {
+          !live && delete this.wsRef
+        }
+      )
+    }
   }
 
   stateOnline = (msg: string) => {
     const decoded = stomp.getJson(msg)
     const live = decoded.open
-    this.setState(
-      {
-        exchangeStatus: !live ? ExchangeStatus.CLOSED : ExchangeStatus.ONLINE,
-        voteInfo: decoded
-      },
-      () => {
-        !live && delete this.wsRef
-      }
-    )
+    if (live !== undefined) {
+      this.setState(
+        {
+          exchangeStatus: !live ? ExchangeStatus.CLOSED : ExchangeStatus.ONLINE,
+          voteInfo: decoded
+        },
+        () => {
+          !live && delete this.wsRef
+        }
+      )
+    }
   }
 
   onOpen = () => {
