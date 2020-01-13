@@ -53,17 +53,28 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
     return (
       <Pagination aria-label="Page navigation example">
         <PaginationItem>
-          <PaginationLink previous onClick={() => this.props.selectQuestion(this.props.currentIndex - 1)} />
+          <PaginationLink
+            previous
+            onClick={() => this.props.selectQuestion(this.props.currentIndex - 1)}
+            disabled={this.props.currentIndex === 0}
+          />
         </PaginationItem>
         {[...new Array(this.props.questionCount).keys()].map((questionIndex: number) => (
-          <PaginationItem key={questionIndex}>
-            <PaginationLink onClick={() => this.props.selectQuestion(questionIndex)}>
+          <PaginationItem key={questionIndex} active={questionIndex === this.props.currentIndex}>
+            <PaginationLink
+              onClick={() => this.props.selectQuestion(questionIndex)}
+              disabled={questionIndex === this.props.currentIndex}
+            >
               {questionIndex + 1}
             </PaginationLink>
           </PaginationItem>
         ))}
         <PaginationItem>
-          <PaginationLink next onClick={() => this.props.selectQuestion(this.props.currentIndex + 1)} />
+          <PaginationLink
+            next
+            onClick={() => this.props.selectQuestion(this.props.currentIndex + 1)}
+            disabled={this.props.questionCount === this.props.currentIndex + 1}
+          />
         </PaginationItem>
       </Pagination>
     )
@@ -88,13 +99,8 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
 
     return (
       <div>
-        <div className="row">
-          <div className="col-12">{this.getPagination()}</div>
-          <div className="col-12">
-            <button className="btn btn-danger float-right" onClick={this.props.closeVote}>
-              Close poll
-            </button>
-          </div>
+        <div className="row-columns row-columns__centered">
+          <div className="column-responsive">{this.getPagination()}</div>
         </div>
 
         <br />
@@ -107,6 +113,12 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
           <Tooltip />
           <Bar dataKey="answers" fill="#8884d8" />
         </BarChart>
+
+        <div className="row-columns row-columns__centered mt-4">
+          <button className="btn btn-danger float-right" onClick={this.props.closeVote}>
+            Close poll
+          </button>
+        </div>
       </div>
     )
   }

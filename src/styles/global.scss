@@ -1,3 +1,5 @@
+@import './mixins.scss';
+
 // Sailec
 @font-face {
   font-family: Sailec;
@@ -140,4 +142,18 @@ a {
   border-color: #80bdff;
   outline: 0;
   box-shadow: none;
+}
+
+.row-columns {
+  display: flex;
+  justify-content: space-between;
+
+  &__centered {
+    justify-content: center;
+  }
+
+  @include respond-to(xs) {
+    flex-direction: column;
+    justify-content: initial;
+  }
 }
