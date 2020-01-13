@@ -3,10 +3,11 @@ import stomp from '#/utils/stomp'
 import Websocket from 'react-websocket'
 import QRCode from 'qrcode.react'
 import { selfUrl, wsRoutes } from '#/agent/api'
-import { getLocalStorageItem } from '#/utils/functions'
+import { getLocalStorageItem, copyToClipBoardEvent } from '#/utils/functions'
 import VoteStats from '../VoteStats'
 import { RouteComponentProps } from 'react-router'
 import { Question, AnswerOption } from '#/store/types'
+import { UncontrolledPopover, PopoverBody } from 'reactstrap'
 
 interface PollerProps extends RouteComponentProps<{ id: string | undefined }> {}
 
@@ -207,15 +208,28 @@ class Poller extends React.Component<PollerProps, PollerState> {
     const { voteId, sid } = this.state
     const link = `${selfUrl}/guest/voter/${voteId}/${sid}`
     return (
-      <div style={{ margin: '0 auto', textAlign: 'center' }}>
+      <div className="text-center">
         {this.getWebSocketWrapper()}
         <QRCode
           value={link}
           size={Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight) * 0.8}
         />
-        <p>
-          <a href={link}>{link}</a>
-        </p>
+        <div className="my-2">
+          <div>
+            Share link:
+            <button
+              id="copyToClipboardLink"
+              className="btn btn-text-link btn-text-link__big"
+              onClick={e => copyToClipBoardEvent(e, link)}
+            >
+              <i className="far fa-copy"></i> {link}
+            </button>
+          </div>
+
+          <UncontrolledPopover trigger="legacy" placement="top" target="#copyToClipboardLink">
+            <PopoverBody>Copied to clipboard!</PopoverBody>
+          </UncontrolledPopover>
+        </div>
         <button className="btn btn-primary" onClick={this.goToOnline}>
           Start!
         </button>
