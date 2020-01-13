@@ -12,9 +12,9 @@ interface ApplicationProps {}
 const Application = (props: ApplicationProps) => {
   const applicationRoutes = (
     <Switch>
-      <Route path="/" component={GuestScene} exact={true} />
+      <Route path="/" component={AuthScene} exact={true} />
       <Route path="/cabinet" component={MainScene} />
-      <Route path="/auth" component={AuthScene} />
+      <Route path="/guest" component={GuestScene} />
     </Switch>
   )
 

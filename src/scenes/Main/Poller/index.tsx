@@ -83,36 +83,30 @@ class Poller extends React.Component<PollerProps, PollerState> {
   stateGatheringInfo = (msg: string) => {
     const decoded = stomp.getJson(msg)
     const live = decoded.open
-    if (!live) {
-      this.setState(() => ({
-        exchangeStatus: ExchangeStatus.CLOSED,
-        voteInfo: decoded
-      }))
-      delete this.wsRef
-      return
-    }
     window.addEventListener('keydown', this.eventGoToOnline)
-    this.setState(() => ({
-      exchangeStatus: ExchangeStatus.SHOWING_LINK,
-      voteInfo: decoded
-    }))
+    this.setState(
+      () => ({
+        exchangeStatus: !live ? ExchangeStatus.CLOSED : ExchangeStatus.SHOWING_LINK,
+        voteInfo: decoded
+      }),
+      () => {
+        !live && delete this.wsRef
+      }
+    )
   }
 
   stateOnline = (msg: string) => {
     const decoded = stomp.getJson(msg)
     const live = decoded.open
-    if (!live) {
-      this.setState(() => ({
-        exchangeStatus: ExchangeStatus.CLOSED,
+    this.setState(
+      {
+        exchangeStatus: !live ? ExchangeStatus.CLOSED : ExchangeStatus.ONLINE,
         voteInfo: decoded
-      }))
-      delete this.wsRef
-      return
-    }
-    this.setState({
-      exchangeStatus: ExchangeStatus.ONLINE,
-      voteInfo: decoded
-    })
+      },
+      () => {
+        !live && delete this.wsRef
+      }
+    )
   }
 
   onOpen = () => {
@@ -207,7 +201,7 @@ class Poller extends React.Component<PollerProps, PollerState> {
 
   renderLink = () => {
     const { voteId, sid } = this.state
-    const link = `${selfUrl}/voter/${voteId}/${sid}`
+    const link = `${selfUrl}/guest/voter/${voteId}/${sid}`
     return (
       <div style={{ margin: '0 auto', textAlign: 'center' }}>
         {this.getWebSocketWrapper()}
