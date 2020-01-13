@@ -2,10 +2,11 @@ import React from 'react'
 import PollTemplateItem from '../../components/PollTemplateItem'
 import { PollTemplateItemType, StoreRootState } from '#/store/types'
 import { getPolls } from '#/store/actions/poll'
-import './index.scss'
 import { connect } from 'react-redux'
+import { withRouter, RouteComponentProps } from 'react-router'
+import './index.scss'
 
-interface PollTemplatesProps {
+interface PollTemplatesProps extends RouteComponentProps {
   polls: Array<PollTemplateItemType>
   getPolls: () => Promise<any>
 }
@@ -15,7 +16,13 @@ const PollTemplates = (props: PollTemplatesProps) => {
     props.getPolls()
   }, [])
 
-  const renderedPolls = props.polls.map((poll: PollTemplateItemType) => <PollTemplateItem key={poll.id} item={poll} />)
+  const navigateToPoll = (pollId: number) => {
+    props.history.push(`/cabinet/poll/${pollId}`)
+  }
+
+  const renderedPolls = props.polls.map((poll: PollTemplateItemType) => (
+    <PollTemplateItem key={poll.id} item={poll} navigateToPoll={() => navigateToPoll(poll.id)} />
+  ))
 
   return (
     <div className="templates-list">
@@ -24,4 +31,6 @@ const PollTemplates = (props: PollTemplatesProps) => {
   )
 }
 
-export default connect((store: StoreRootState) => ({ polls: store.poll.polls }), { getPolls })(PollTemplates)
+export default withRouter(
+  connect((store: StoreRootState) => ({ polls: store.poll.polls }), { getPolls })(PollTemplates)
+)

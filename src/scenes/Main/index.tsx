@@ -17,6 +17,8 @@ interface MainSceneProps extends RouteComponentProps {
 const MainScene = (props: MainSceneProps) => {
   const { match } = props
 
+  const [navbarOpen, setNavbarOpen] = React.useState<boolean>(true)
+
   // Block visiting not authenticated user
   if (!props.authenticated) {
     return <Redirect to="/auth" />
@@ -25,9 +27,7 @@ const MainScene = (props: MainSceneProps) => {
   return (
     <div className="main">
       <div className="main__inner">
-        <div className="navbar">
-          <Navbar />
-        </div>
+        <Navbar open={navbarOpen} toggleOpen={() => setNavbarOpen(!navbarOpen)} />
 
         <div className="layout container">
           <Switch>

@@ -25,6 +25,8 @@ const NAVBAR_LINKS = [
 
 interface NavbarProps extends RouteComponentProps {
   logout: () => Promise<any>
+  open: boolean
+  toggleOpen: () => void
 }
 
 const Navbar = (props: NavbarProps) => {
@@ -45,33 +47,43 @@ const Navbar = (props: NavbarProps) => {
     </NavItem>
   ))
 
+  const navbarClassname = props.open ? 'navbar-open navbar' : 'navbar-hidden navbar'
+
   return (
-    <RNavbar color="white" light expand="md">
-      <div className="container">
-        <NavbarBrand tag={Link} to="/cabinet">
-          <img
-            src="https://avatars3.githubusercontent.com/u/54907581?s=200&v=4"
-            alt="logotype"
-            width="50"
-            height="50"
-          />
-          <span className="ml-2">MUCPoll</span>
-        </NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
-            {renderedLinks}
-          </Nav>
-          <Nav navbar>
-            <NavItem>
-              <NavLink tag={Link} to="/auth" onClick={handleSubmit}>
-                <span>Logout</span>
-              </NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </div>
-    </RNavbar>
+    <div className={navbarClassname}>
+      <RNavbar color="white" light expand="md">
+        <div className="container">
+          <NavbarBrand tag={Link} to="/cabinet">
+            <img
+              src="https://avatars3.githubusercontent.com/u/54907581?s=200&v=4"
+              alt="logotype"
+              width="50"
+              height="50"
+            />
+            <span className="ml-2">MUCPoll</span>
+          </NavbarBrand>
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="mr-auto" navbar>
+              {renderedLinks}
+            </Nav>
+            <Nav navbar>
+              <NavItem>
+                <NavLink tag={Link} to="/auth" onClick={handleSubmit}>
+                  <span>Logout</span>
+                </NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </div>
+
+        <div className="triangle-down center">
+          <p>
+            <i className="fas fa-chevron-down fa-2x isDown" onClick={props.toggleOpen}></i>
+          </p>
+        </div>
+      </RNavbar>
+    </div>
   )
 }
 

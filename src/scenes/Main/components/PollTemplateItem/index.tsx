@@ -4,6 +4,7 @@ import { PollTemplateItemType } from '#/store/types'
 
 interface PollTemplateItemProps {
   item: PollTemplateItemType
+  navigateToPoll: () => void
 }
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
@@ -56,7 +57,7 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
             </button>
           </div>
           <div className="templates-list__item__actions__action">
-            <button className="btn btn-success btn-not-rounded">
+            <button className="btn btn-success btn-not-rounded" onClick={props.navigateToPoll}>
               <i className="fas fa-play"></i>
             </button>
           </div>

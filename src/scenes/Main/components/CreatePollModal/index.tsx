@@ -1,10 +1,10 @@
-import React, { FormEvent, ChangeEvent } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, FormGroup } from 'reactstrap'
+import React, { ChangeEvent } from 'react'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import { createPoll } from '#/store/actions/poll'
 import PollQuestionBare from '../PollQuestionBare'
-import _ from 'lodash'
 import { QuestionContainer, QuestionHash, QuestionAnswerHash } from '#/store/types'
+import _ from 'lodash'
 
 interface CreatePollModalProps {
   isOpen: boolean
@@ -16,9 +16,8 @@ const CreatePollModal = (props: CreatePollModalProps) => {
   const [pollTitle, setPollTitle] = React.useState<string>('')
   const [questions, setQuestions] = React.useState<QuestionContainer>({})
 
-  const createPoll = (evt: FormEvent) => {
-    evt.preventDefault()
-
+  const createPoll = (event: React.FormEvent) => {
+    event.preventDefault()
     if (pollTitle) {
       props.createPoll(pollTitle).then(() => {
         props.toggleModal()

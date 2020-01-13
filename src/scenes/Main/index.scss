@@ -9,11 +9,17 @@
   background: rgba(246, 250, 251, 1);
 }
 
-.navbar {
-  width: 100%;
-  background: #fff;
+.navbar-open + .layout {
+  margin-top: 25px;
+}
+
+.navbar-hidden + .layout {
+  margin-top: 50px;
 }
 
 .layout {
+  transition: 0.2s;
   width: 100%;
+  padding-top: 15px;
+  padding-bottom: 30px;
 }

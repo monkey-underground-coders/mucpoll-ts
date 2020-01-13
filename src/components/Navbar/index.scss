@@ -1,6 +1,48 @@
 @import '#/styles/mixins.scss';
 
+.navbar {
+  width: 100%;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.triangle-down {
+  transition: 0.2s;
+  cursor: pointer;
+  position: fixed;
+  margin-top: 65px;
+  width: 0;
+  height: 0;
+  bottom: -10px;
+
+  &.center {
+    margin: auto;
+    margin-top: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  p {
+    text-align: center;
+    color: #ccc;
+    margin-top: -13px;
+    margin-left: -13px;
+    transition: color 0.2s;
+  }
+}
+
+.navbar-hidden .triangle-down {
+  bottom: -30px;
+}
+
+.navbar-hidden {
+  margin-top: -93px;
+}
+
 nav.navbar {
+  transition: 0.2s;
+
   .navbar-brand {
     display: flex;
     flex-direction: revert;
