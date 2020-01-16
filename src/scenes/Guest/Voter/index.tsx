@@ -5,6 +5,7 @@ import { wsRoutes } from '#/agent/api'
 import VoteBoard from '../components/VoteBoard'
 import { RouteComponentProps } from 'react-router'
 import { Question, AnswerOption } from '#/store/types'
+import Loader from '#/components/Loader'
 
 interface VoterProps extends RouteComponentProps<{ voteId: string; voteUUID: string }> {}
 
@@ -170,7 +171,7 @@ class Voter extends React.Component<VoterProps, VoterState> {
     const questionTitle: string = currentQuestion.question
     const answerOptions: Array<AnswerOption> = currentQuestion.answerOptions
     return (
-      <div>
+      <>
         {this.getWebSocketWrapper()}
         <VoteBoard
           mayVote={!(currentQID.toString() in votedOn)}
@@ -180,32 +181,32 @@ class Voter extends React.Component<VoterProps, VoterState> {
           voteMethod={this.vote}
           votingHistory={votedOn}
         />
-      </div>
+      </>
     )
   }
 
   renderAwaitingStart = () => {
     return (
-      <div>
+      <>
         {this.getWebSocketWrapper()}
-        Waiting for the start
-      </div>
+        <h2 className="text-center">Waiting for the start</h2>
+      </>
     )
   }
 
   renderLoading = () => {
     return (
-      <div>
+      <>
         {this.getWebSocketWrapper()}
-        Loading...
-      </div>
+        <Loader />
+      </>
     )
   }
 
   render() {
     const { exchangeStatus } = this.state
     if (exchangeStatus === ExchangeStatusEnum.CLOSED) {
-      return <div>End</div>
+      return <h2 className="text-center">Poll has finished. Thank you!</h2>
     }
 
     if (exchangeStatus === ExchangeStatusEnum.ONLINE) {

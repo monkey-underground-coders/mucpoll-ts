@@ -1,8 +1,8 @@
 import React from 'react'
 import { RouteComponentProps, Switch, Route } from 'react-router'
-import { Link } from 'react-router-dom'
 import Page from '#/components/Page'
 import Voter from './Voter'
+import './index.scss'
 
 interface GuestSceneProps extends RouteComponentProps {}
 
@@ -11,8 +11,8 @@ const GuestScene = (props: GuestSceneProps) => {
 
   return (
     <div className="guest">
-      <div className="guest__inner container">
-        <div className="layout container">
+      <div className="guest__inner">
+        <div className="layout container container-responsive">
           <Switch>
             <Route
               path={`${match.url}/voter/:voteId/:voteUUID`}
