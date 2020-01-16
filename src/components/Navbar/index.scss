@@ -43,6 +43,16 @@
 nav.navbar {
   transition: 0.2s;
 
+  .navbar-brand-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include respond-to(md) {
+      width: 100%;
+    }
+  }
+
   .navbar-brand {
     display: flex;
     flex-direction: revert;

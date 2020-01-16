@@ -53,16 +53,19 @@ const Navbar = (props: NavbarProps) => {
     <div className={navbarClassname}>
       <RNavbar color="white" light expand="md">
         <div className="container">
-          <NavbarBrand tag={Link} to="/cabinet">
-            <img
-              src="https://avatars3.githubusercontent.com/u/54907581?s=200&v=4"
-              alt="logotype"
-              width="50"
-              height="50"
-            />
-            <span className="ml-2">MUCPoll</span>
-          </NavbarBrand>
-          <NavbarToggler onClick={toggle} />
+          <div className="navbar-brand-block">
+            <NavbarBrand tag={Link} to="/cabinet">
+              <img
+                src="https://avatars3.githubusercontent.com/u/54907581?s=200&v=4"
+                alt="logotype"
+                width="50"
+                height="50"
+              />
+              <span className="ml-2">MUCPoll</span>
+            </NavbarBrand>
+            <NavbarToggler onClick={toggle} />
+          </div>
+
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
               {renderedLinks}
