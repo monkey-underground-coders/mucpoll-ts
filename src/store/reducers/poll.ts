@@ -2,6 +2,7 @@ import ActionTypes from '../actions'
 import { createReducer } from '../helpers'
 import { Action } from 'redux'
 import { PollState, PollTemplateItemType } from '../types'
+import _ from 'lodash'
 
 const initialState: PollState = {
   polls: [],
@@ -11,6 +12,9 @@ const initialState: PollState = {
   // Poll creating
   pollCreating: false,
   pollCreatingFailed: false,
+  // Poll deleting
+  pollDeleting: false,
+  pollDeletingFailed: false,
   // Poll question creating
   pollQuestionsCreating: false,
   pollQuestionsCreatingFailed: false
@@ -74,6 +78,25 @@ export const pollReducer = createReducer<PollState, Action>(
       ...state,
       pollQuestionsCreating: false,
       pollQuestionsCreatingFailed: true
+    }),
+
+    [ActionTypes.POLL.DELETE_POLL_START]: (state: PollState, action: any) => ({
+      ...state,
+      pollDeleting: true,
+      pollDeletingFailed: false
+    }),
+
+    [ActionTypes.POLL.DELETE_POLL_SUCCESS]: (state: PollState, action: any) => ({
+      ...state,
+      polls: _.omit(state.polls, action.payload.pid),
+      pollDeleting: false,
+      pollDeletingFailed: false
+    }),
+
+    [ActionTypes.POLL.DELETE_POLL_FAIL]: (state: PollState, action: any) => ({
+      ...state,
+      pollDeleting: false,
+      pollDeletingFailed: true
     })
   },
   initialState

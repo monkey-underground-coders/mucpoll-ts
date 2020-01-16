@@ -43,12 +43,14 @@ export interface UserState {
 }
 
 export interface PollState {
-  polls: Array<PollTemplateItemType>
+  polls: Pick<PollTemplateItemType[], number>
   pollsLoading: boolean
   pollsLoadingFailed: boolean
-  pollCreating: boolean,
-  pollCreatingFailed: boolean,
-  pollQuestionsCreating: boolean,
+  pollCreating: boolean
+  pollCreatingFailed: boolean
+  pollDeleting: boolean
+  pollDeletingFailed: boolean
+  pollQuestionsCreating: boolean
   pollQuestionsCreatingFailed: boolean
 }
 

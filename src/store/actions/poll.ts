@@ -2,7 +2,7 @@ import { StoreRootState, QuestionsPayload } from '../types'
 import apiRoutes from '#/agent/api'
 import ActionTypes from '.'
 import { Dispatch, Action } from 'redux'
-import { getRequest, postRequest } from '#/agent'
+import { getRequest, postRequest, putRequest, deleteRequest } from '#/agent'
 import _ from 'lodash'
 import { ThunkDispatch } from 'redux-thunk'
 
@@ -60,5 +60,20 @@ export const createPoll = (name: string, questions: QuestionsPayload = []) => (
     .catch(err => {
       console.warn(err)
       dispatch({ type: ActionTypes.POLL.CREATE_POLL_FAIL })
+    })
+}
+
+export const deletePoll = (pid: number) => (
+  dispatch: ThunkDispatch<StoreRootState, any, Action>,
+  getState: () => StoreRootState
+) => {
+  dispatch({ type: ActionTypes.POLL.DELETE_POLL_START })
+  return deleteRequest(apiRoutes.poll(pid))
+    .then(() => {
+      dispatch({ type: ActionTypes.POLL.DELETE_POLL_SUCCESS, payload: { pid } })
+    })
+    .catch(err => {
+      console.warn(err)
+      dispatch({ type: ActionTypes.POLL.DELETE_POLL_FAIL })
     })
 }

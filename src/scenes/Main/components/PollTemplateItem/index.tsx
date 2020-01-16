@@ -5,6 +5,8 @@ import { PollTemplateItemType } from '#/store/types'
 interface PollTemplateItemProps {
   item: PollTemplateItemType
   navigateToPoll: () => void
+  deletePoll: () => void
+  pollDeleting: boolean
 }
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
@@ -52,7 +54,7 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
             </button>
           </div>
           <div className="templates-list__item__actions__action">
-            <button className="btn btn-danger btn-not-rounded">
+            <button className="btn btn-danger btn-not-rounded" onClick={props.deletePoll} disabled={props.pollDeleting}>
               <i className="fas fa-trash"></i>
             </button>
           </div>

@@ -61,4 +61,4 @@ export const deleteRequest = (url: string) =>
   fetch(url, {
     method: 'DELETE',
     headers: constructRequestHeaders()
-  }).then(initialResponseHandler)
+  })

@@ -1,17 +1,20 @@
 import React from 'react'
 import PollTemplateItem from '../../components/PollTemplateItem'
 import { PollTemplateItemType, StoreRootState } from '#/store/types'
-import { getPolls } from '#/store/actions/poll'
+import { getPolls, deletePoll } from '#/store/actions/poll'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
 import './index.scss'
 import Loader from '#/components/Loader'
 
 interface PollTemplatesProps extends RouteComponentProps {
-  polls: Array<PollTemplateItemType>
+  polls: Pick<PollTemplateItemType[], number>
   pollsLoading: boolean
   pollsLoadingFailed: boolean
+  pollDeleting: boolean
+  pollDeletingFailed: boolean
   getPolls: () => Promise<any>
+  deletePoll: (pid: number) => Promise<any>
 }
 
 const PollTemplates = (props: PollTemplatesProps) => {
@@ -26,7 +29,13 @@ const PollTemplates = (props: PollTemplatesProps) => {
   const polls = React.useMemo(() => Object.values(props.polls), [props.polls])
 
   const renderedPolls = polls.map((poll: PollTemplateItemType) => (
-    <PollTemplateItem key={poll.id} item={poll} navigateToPoll={() => navigateToPoll(poll.id)} />
+    <PollTemplateItem
+      key={poll.id}
+      item={poll}
+      navigateToPoll={() => navigateToPoll(poll.id)}
+      deletePoll={() => props.deletePoll(poll.id)}
+      pollDeleting={props.pollDeleting}
+    />
   ))
 
   return (
@@ -47,8 +56,10 @@ export default withRouter(
     (store: StoreRootState) => ({
       polls: store.poll.polls,
       pollsLoading: store.poll.pollsLoading,
-      pollsLoadingFailed: store.poll.pollsLoadingFailed
+      pollsLoadingFailed: store.poll.pollsLoadingFailed,
+      pollDeleting: store.poll.pollDeleting,
+      pollDeletingFailed: store.poll.pollDeletingFailed
     }),
-    { getPolls }
+    { getPolls, deletePoll }
   )(PollTemplates)
 )
