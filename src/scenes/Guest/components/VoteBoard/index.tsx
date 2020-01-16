@@ -1,5 +1,7 @@
 import React from 'react'
 import { AnswerOption } from '#/store/types'
+import './index.scss'
+import Checkbox from '#/components/Checkbox'
 
 interface VoteBoardProps {
   mayVote: boolean
@@ -15,20 +17,19 @@ const VoteBoard = (props: VoteBoardProps) => {
   const votedOn = votingHistory[props.qid]
 
   return (
-    <div className="box">
+    <div className="box voteboard-item">
       <div className="box__header">{props.question}</div>
       <div className="box__body">
         {props.answers.map(a => (
           <div key={a.answer} className="form-group">
-            <input
-              type="checkbox"
-              id={`vote${a.id}`}
-              onChange={v => props.voteMethod(props.qid, a.id)}
+            <Checkbox
               value={a.answer}
+              label={a.answer}
               checked={votedOn === a.id}
               disabled={!mayVote}
+              labelKey={`vote${a.id}`}
+              toggle={() => props.voteMethod(props.qid, a.id)}
             />
-            <label htmlFor={`vote${a.id}`}>{a.answer}</label>
           </div>
         ))}
       </div>

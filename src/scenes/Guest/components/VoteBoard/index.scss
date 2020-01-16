@@ -1,0 +1,14 @@
+.voteboard-item {
+  .box__body > .form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+
+    label {
+      display: initial;
+      margin-bottom: 0;
+      flex: 1 0;
+    }
+  }
+}
