@@ -19,7 +19,8 @@ const getWsUrl = (route: string) => {
 export const apiRoutes = {
   authorize: getUrl(`user/cookies`),
   getPolls: getUrl(`poll/polls`),
-  createPoll: getUrl(`poll/create`)
+  createPoll: getUrl(`poll/create`),
+  createPollQuestions: (pid: number) => getUrl(`poll/${pid}/question`)
 }
 
 export const wsRoutes = {

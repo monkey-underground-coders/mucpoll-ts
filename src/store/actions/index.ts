@@ -15,7 +15,14 @@ export const ActionTypes = {
     GET_POLLS_START: `${ActionPrefixes.poll}/GET_POLLS_START`,
     GET_POLLS_SUCCESS: `${ActionPrefixes.poll}/GET_POLLS_SUCCESS`,
     GET_POLLS_FAIL: `${ActionPrefixes.poll}/GET_POLLS_FAIL`,
-    CREATE: `${ActionPrefixes.poll}/CREATE`
+
+    CREATE_POLL_START: `${ActionPrefixes.poll}/CREATE_POLL_START`,
+    CREATE_POLL_SUCCESS: `${ActionPrefixes.poll}/CREATE_POLL_SUCCESS`,
+    CREATE_POLL_FAIL: `${ActionPrefixes.poll}/CREATE_POLL_FAIL`,
+
+    CREATE_POLL_QUESTIONS_START: `${ActionPrefixes.poll}/CREATE_POLL_QUESTIONS_START`,
+    CREATE_POLL_QUESTIONS_SUCCESS: `${ActionPrefixes.poll}/CREATE_POLL_QUESTIONS_SUCCESS`,
+    CREATE_POLL_QUESTIONS_FAIL: `${ActionPrefixes.poll}/CREATE_POLL_QUESTIONS_FAIL`
   }
 }
 

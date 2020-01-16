@@ -3,13 +3,19 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import { createPoll } from '#/store/actions/poll'
 import PollQuestionBare from '../PollQuestionBare'
-import { QuestionContainer, QuestionHash, QuestionAnswerHash } from '#/store/types'
+import {
+  QuestionContainer,
+  QuestionHash,
+  QuestionAnswerHash,
+  QuestionContainerItem,
+  QuestionsPayload
+} from '#/store/types'
 import _ from 'lodash'
 
 interface CreatePollModalProps {
   isOpen: boolean
   toggleModal: any
-  createPoll: (name: string) => Promise<any>
+  createPoll: (name: string, questions: QuestionsPayload) => Promise<any>
 }
 
 const CreatePollModal = (props: CreatePollModalProps) => {
@@ -19,10 +25,19 @@ const CreatePollModal = (props: CreatePollModalProps) => {
   const createPoll = (event: React.FormEvent) => {
     event.preventDefault()
     if (pollTitle) {
-      props.createPoll(pollTitle).then(() => {
+      const questions = constructQuestionsToRequest()
+      props.createPoll(pollTitle, questions).then((json: any) => {
+        console.log(json)
         props.toggleModal()
       })
     }
+  }
+
+  const constructQuestionsToRequest = () => {
+    return Object.values(questions).map((question: QuestionContainerItem) => ({
+      title: question.title,
+      answers: Object.values(question.answers)
+    }))
   }
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {

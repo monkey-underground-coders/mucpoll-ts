@@ -23,7 +23,9 @@ const PollTemplates = (props: PollTemplatesProps) => {
     props.history.push(`/cabinet/poll/${pollId}`)
   }
 
-  const renderedPolls = props.polls.map((poll: PollTemplateItemType) => (
+  const polls = React.useMemo(() => Object.values(props.polls), [props.polls])
+
+  const renderedPolls = polls.map((poll: PollTemplateItemType) => (
     <PollTemplateItem key={poll.id} item={poll} navigateToPoll={() => navigateToPoll(poll.id)} />
   ))
 

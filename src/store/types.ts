@@ -6,6 +6,8 @@ export type PrimaryKey = number
 
 export type PollQuestionItem = string
 
+export type QuestionsPayload = Array<{ answers: string[]; title: string }>
+
 export type QuestionHash = string
 export type QuestionTitle = string
 export type QuestionAnswerHash = string
@@ -44,6 +46,10 @@ export interface PollState {
   polls: Array<PollTemplateItemType>
   pollsLoading: boolean
   pollsLoadingFailed: boolean
+  pollCreating: boolean,
+  pollCreatingFailed: boolean,
+  pollQuestionsCreating: boolean,
+  pollQuestionsCreatingFailed: boolean
 }
 
 export interface StoreRootState {
