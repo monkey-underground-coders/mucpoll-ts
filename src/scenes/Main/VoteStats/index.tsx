@@ -11,6 +11,7 @@ interface VoteStatsProps {
   closeVote: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   question: string
   answers: Array<AnswerOption>
+  openShareModal: () => void
 }
 
 interface VoteStatsState {
@@ -96,8 +97,6 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
 
     const chartHeight = this.state.height * 0.4
 
-
-
     return (
       <>
         <div className="row-columns row-columns__centered">
@@ -107,7 +106,7 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
         <br />
         <p className="text-center">{this.props.question}</p>
 
-        <ResponsiveContainer width={"100%"} height={chartHeight}>
+        <ResponsiveContainer width={'100%'} height={chartHeight}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -120,6 +119,9 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
         <div className="row-columns row-columns__centered mt-4">
           <button className="btn btn-danger float-right" onClick={this.props.closeVote}>
             Close poll
+          </button>
+          <button className="btn btn-primary ml-4" onClick={this.props.openShareModal}>
+            Share poll
           </button>
         </div>
       </>

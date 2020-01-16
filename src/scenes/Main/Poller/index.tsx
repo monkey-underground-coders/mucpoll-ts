@@ -5,9 +5,11 @@ import QRCode from 'qrcode.react'
 import { selfUrl, wsRoutes } from '#/agent/api'
 import { getLocalStorageItem, copyToClipBoardEvent } from '#/utils/functions'
 import VoteStats from '../VoteStats'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, withRouter } from 'react-router'
 import { Question, AnswerOption } from '#/store/types'
 import { UncontrolledPopover, PopoverBody } from 'reactstrap'
+import Loader from '#/components/Loader'
+import SharePollModal from '../components/SharePollModal'
 
 interface PollerProps extends RouteComponentProps<{ id: string | undefined }> {}
 
@@ -16,6 +18,7 @@ interface PollerState {
   sid: string | number | null
   voteInfo: any | null
   voteId: string | undefined
+  sharePollModalOpen: boolean
 }
 
 enum ExchangeStatus {
@@ -49,12 +52,16 @@ class Poller extends React.Component<PollerProps, PollerState> {
   constructor(props: PollerProps) {
     super(props)
     this.state = {
-      exchangeStatus: ExchangeStatus.CONNECTING,
       sid: null,
       voteInfo: null,
-      voteId: props.match.params.id
+      sharePollModalOpen: false,
+      voteId: props.match.params.id,
+      exchangeStatus: ExchangeStatus.CONNECTING
     }
   }
+
+  toggleSharePollModalOpen = () =>
+    this.setState((prevState: PollerState) => ({ sharePollModalOpen: !prevState.sharePollModalOpen }))
 
   stateConnecting = () => {
     const { voteId } = this.state
@@ -149,7 +156,9 @@ class Poller extends React.Component<PollerProps, PollerState> {
   closeVote = () => {
     const { voteId, sid } = this.state
     this.sendMessage(stomp.send(`/app/polladmin/${voteId}/${sid}/stopvote`))
-    this.setState({ exchangeStatus: ExchangeStatus.CLOSED })
+    this.setState({ exchangeStatus: ExchangeStatus.CLOSED }, () => {
+      this.props.history.push('/')
+    })
   }
 
   goToOnline = () => {
@@ -199,17 +208,20 @@ class Poller extends React.Component<PollerProps, PollerState> {
           questionCount={voteInfo.pollInfo.questions.length}
           closeVote={this.closeVote}
           currentAnswers={currentAnswers}
+          openShareModal={() => this.toggleSharePollModalOpen()}
         />
+        <SharePollModal isOpen={this.state.sharePollModalOpen} toggle={() => this.toggleSharePollModalOpen()}>
+          {this.getLinks()}
+        </SharePollModal>
       </div>
     )
   }
 
-  renderLink = () => {
+  getLinks = () => {
     const { voteId, sid } = this.state
     const link = `${selfUrl}/guest/voter/${voteId}/${sid}`
     return (
-      <div className="text-center">
-        {this.getWebSocketWrapper()}
+      <>
         <QRCode
           value={link}
           size={Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight) * 0.8}
@@ -230,6 +242,16 @@ class Poller extends React.Component<PollerProps, PollerState> {
             <PopoverBody>Copied to clipboard!</PopoverBody>
           </UncontrolledPopover>
         </div>
+      </>
+    )
+  }
+
+  renderLink = () => {
+    return (
+      <div className="text-center">
+        {this.getWebSocketWrapper()}
+        {this.getLinks()}
+
         <button className="btn btn-primary" onClick={this.goToOnline}>
           Start!
         </button>
@@ -241,7 +263,7 @@ class Poller extends React.Component<PollerProps, PollerState> {
     return (
       <div>
         {this.getWebSocketWrapper()}
-        <div>Loading ...</div>
+        <Loader />
       </div>
     )
   }
@@ -260,4 +282,4 @@ class Poller extends React.Component<PollerProps, PollerState> {
   }
 }
 
-export default Poller
+export default withRouter(Poller)

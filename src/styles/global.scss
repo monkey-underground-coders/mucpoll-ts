@@ -50,6 +50,12 @@ body {
   font-family: 'sfprodisplay', sans-serif;
 }
 
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 a {
   outline: none !important;
 }
@@ -156,4 +162,25 @@ a {
     flex-direction: column;
     justify-content: initial;
   }
+}
+
+.container-responsive {
+  @include respond-to(xs) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+canvas {
+  height: auto !important;
+  width: 100% !important;
+  max-width: calc(100% * 0.6);
+
+  @include respond-to(xs) {
+    max-width: 100%;
+  }
+}
+
+.modal-body canvas {
+  max-width: 100% !important;
 }
