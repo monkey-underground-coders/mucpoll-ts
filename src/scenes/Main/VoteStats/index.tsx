@@ -1,5 +1,5 @@
 import React from 'react'
-import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import { AnswerOption, AnswerSignature } from '#/store/types'
 
@@ -94,11 +94,12 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
       answers: answerSig.count
     }))
 
-    const chartWidth = this.state.width * 0.8
-    const chartHeight = this.state.height * 0.8
+    const chartHeight = this.state.height * 0.4
+
+
 
     return (
-      <div>
+      <>
         <div className="row-columns row-columns__centered">
           <div className="column-responsive">{this.getPagination()}</div>
         </div>
@@ -106,20 +107,22 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
         <br />
         <p className="text-center">{this.props.question}</p>
 
-        <BarChart width={chartWidth} height={chartHeight} data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="answers" fill="#8884d8" />
-        </BarChart>
+        <ResponsiveContainer width={"100%"} height={chartHeight}>
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="answers" fill="#8884d8" />
+          </BarChart>
+        </ResponsiveContainer>
 
         <div className="row-columns row-columns__centered mt-4">
           <button className="btn btn-danger float-right" onClick={this.props.closeVote}>
             Close poll
           </button>
         </div>
-      </div>
+      </>
     )
   }
 }
