@@ -42,6 +42,8 @@ export interface UserState {
 
 export interface PollState {
   polls: Array<PollTemplateItemType>
+  pollsLoading: boolean
+  pollsLoadingFailed: boolean
 }
 
 export interface StoreRootState {

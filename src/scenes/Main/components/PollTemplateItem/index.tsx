@@ -37,7 +37,7 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
         <div className="templates-list__item__info">
           <div className="templates-list__item__info__launched">
             <div className="templates-list__item__info__caption">Launched</div>
-            <div className="templates-list__item__info__title">{props.item.launchedCount}</div>
+            <div className="templates-list__item__info__title">{props.item.launchedCount} times</div>
           </div>
           <div className="templates-list__item__info__date">
             <div className="templates-list__item__info__caption">Created</div>

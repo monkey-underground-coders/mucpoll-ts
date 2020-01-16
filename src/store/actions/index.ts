@@ -12,7 +12,9 @@ export const ActionTypes = {
   },
 
   POLL: {
-    GET_POLLS: `${ActionPrefixes.poll}/GET_POLLS`,
+    GET_POLLS_START: `${ActionPrefixes.poll}/GET_POLLS_START`,
+    GET_POLLS_SUCCESS: `${ActionPrefixes.poll}/GET_POLLS_SUCCESS`,
+    GET_POLLS_FAIL: `${ActionPrefixes.poll}/GET_POLLS_FAIL`,
     CREATE: `${ActionPrefixes.poll}/CREATE`
   }
 }

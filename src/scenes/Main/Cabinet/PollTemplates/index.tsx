@@ -5,9 +5,12 @@ import { getPolls } from '#/store/actions/poll'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
 import './index.scss'
+import Loader from '#/components/Loader'
 
 interface PollTemplatesProps extends RouteComponentProps {
   polls: Array<PollTemplateItemType>
+  pollsLoading: boolean
+  pollsLoadingFailed: boolean
   getPolls: () => Promise<any>
 }
 
@@ -26,11 +29,24 @@ const PollTemplates = (props: PollTemplatesProps) => {
 
   return (
     <div className="templates-list">
-      <div className="templates-list__inner">{renderedPolls}</div>
+      {props.pollsLoadingFailed ? (
+        <h3>An error occured while getting poll templates... Please, restart the page</h3>
+      ) : props.pollsLoading ? (
+        <Loader />
+      ) : (
+        <div className="templates-list__inner">{renderedPolls}</div>
+      )}
     </div>
   )
 }
 
 export default withRouter(
-  connect((store: StoreRootState) => ({ polls: store.poll.polls }), { getPolls })(PollTemplates)
+  connect(
+    (store: StoreRootState) => ({
+      polls: store.poll.polls,
+      pollsLoading: store.poll.pollsLoading,
+      pollsLoadingFailed: store.poll.pollsLoadingFailed
+    }),
+    { getPolls }
+  )(PollTemplates)
 )

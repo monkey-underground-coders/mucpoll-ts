@@ -5,9 +5,14 @@ import { Dispatch } from 'redux'
 import { getRequest, postRequest } from '#/agent'
 
 export const getPolls = () => (dispatch: Dispatch, getState: () => StoreRootState) => {
-  return getRequest(apiRoutes.getPolls).then((json: any) => {
-    dispatch({ type: ActionTypes.POLL.GET_POLLS, payload: json })
-  })
+  dispatch({ type: ActionTypes.POLL.GET_POLLS_START })
+  return getRequest(apiRoutes.getPolls)
+    .then((json: any) => {
+      dispatch({ type: ActionTypes.POLL.GET_POLLS_SUCCESS, payload: json })
+    })
+    .catch(err => {
+      dispatch({ type: ActionTypes.POLL.GET_POLLS_FAIL })
+    })
 }
 
 export const createPoll = (name: string) => (dispatch: Dispatch, getState: () => StoreRootState) => {
