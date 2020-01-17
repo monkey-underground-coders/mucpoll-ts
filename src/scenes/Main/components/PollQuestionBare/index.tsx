@@ -1,23 +1,22 @@
 import React from 'react'
 import PollQuestion from '../PollQuestion'
-import { QuestionContainer } from '#/store/types'
+import { QuestionContainer, QuestionAnswerHash, QuestionHash } from '#/store/types'
 
 interface PollQuestionBareProps {
   container: QuestionContainer
-
-  onQuestionCreate: any
-  onQuestionDelete: any
-  onQuestionChange: any
-  onAnswerChange: any
-  onAnswerCreate: any
-  onAnswerDelete: any
+  onQuestionCreate: () => void
+  onQuestionDelete: (hash: QuestionHash) => void
+  onQuestionChange: (hash: QuestionHash, value: string) => void
+  onAnswerCreate: (hash: QuestionHash) => void
+  onAnswerDelete: (hash: QuestionHash, answerHash: QuestionAnswerHash) => void
+  onAnswerChange: (hash: QuestionHash, answerHash: QuestionAnswerHash, nextValue: string) => void
 }
 
 const PollQuestionBare = (props: PollQuestionBareProps) => {
   const renderQuestions = () => {
     const questions = Object.keys(props.container)
     if (questions.length) {
-      return questions.map((questionHash: string, index: number) => {
+      return questions.map((questionHash: QuestionHash, index: number) => {
         const question = props.container[questionHash]
         return (
           <PollQuestion
@@ -26,11 +25,11 @@ const PollQuestionBare = (props: PollQuestionBareProps) => {
             question={question}
             onQuestionDelete={() => props.onQuestionDelete(questionHash)}
             onQuestionChange={(value: string) => props.onQuestionChange(questionHash, value)}
-            onAnswerChange={(answerHash: string, value: string) =>
+            onAnswerChange={(answerHash: QuestionAnswerHash, value: string) =>
               props.onAnswerChange(questionHash, answerHash, value)
             }
             onAnswerCreate={() => props.onAnswerCreate(questionHash)}
-            onAnswerDelete={(answerHash: string) => props.onAnswerDelete(questionHash, answerHash)}
+            onAnswerDelete={(answerHash: QuestionAnswerHash) => props.onAnswerDelete(questionHash, answerHash)}
           />
         )
       })

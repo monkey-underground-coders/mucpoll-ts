@@ -54,11 +54,11 @@ const CreatePollModal = (props: CreatePollModalProps) => {
     setQuestions({ ...questions, [newHash]: { title: '', answers: {} } })
   }
 
-  const onQuestionChange = (hash: string, value: string) => {
+  const onQuestionChange = (hash: QuestionHash, value: string) => {
     setQuestions({ ...questions, [hash]: { ...questions[hash], title: value } })
   }
 
-  const onQuestionDelete = (hash: string) => {
+  const onQuestionDelete = (hash: QuestionHash) => {
     setQuestions(_.omit(questions, hash))
   }
 

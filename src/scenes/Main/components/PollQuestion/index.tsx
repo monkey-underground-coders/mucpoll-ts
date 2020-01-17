@@ -7,19 +7,19 @@ import { QuestionContainerItem, QuestionHash, QuestionAnswerHash } from '#/store
 interface PollQuestionAnswerProps {
   hash: QuestionAnswerHash
   answer: string
-  onDelete: any
-  onChange: any
+  onDelete: () => void
+  onChange: (hash: string, value: string) => void
 }
 
 interface PollQuestionProps {
   hash: QuestionHash
   readonly?: boolean
   question: QuestionContainerItem
-  onAnswerCreate: any
-  onAnswerChange: any
-  onAnswerDelete: any
-  onQuestionChange: any
-  onQuestionDelete: any
+  onAnswerCreate: () => void
+  onAnswerDelete: (answerHash: QuestionAnswerHash) => void
+  onAnswerChange: (answerHash: QuestionAnswerHash, value: string) => void
+  onQuestionChange: (value: string) => void
+  onQuestionDelete: () => void
 }
 
 const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
@@ -90,9 +90,9 @@ const PollQuestion = (props: PollQuestionProps) => {
       type="text"
       placeholder="Question title"
       className="form-control w-100"
-      required
       value={title}
       onChange={e => props.onQuestionChange(e.target.value)}
+      required
     />
   ) : (
     <span>{title}</span>
