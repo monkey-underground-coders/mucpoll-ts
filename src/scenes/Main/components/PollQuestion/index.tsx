@@ -8,7 +8,7 @@ interface PollQuestionAnswerProps {
   hash: QuestionAnswerHash
   answer: string
   onDelete: () => void
-  onChange: (hash: string, value: string) => void
+  onChange: (hash: QuestionAnswerHash, value: string) => void
 }
 
 interface PollQuestionProps {

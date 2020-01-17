@@ -20,7 +20,7 @@ export const apiRoutes = {
   authorize: getUrl(`user/cookies`),
   getPolls: getUrl(`poll/polls`),
   createPoll: getUrl(`poll/create`),
-  createPollQuestions: (pid: number) => getUrl(`poll/${pid}/question`),
+  pollQuestion: (pid: number) => getUrl(`poll/${pid}/question`),
   poll: (pid: number) => getUrl(`poll/${pid}`)
 }
 

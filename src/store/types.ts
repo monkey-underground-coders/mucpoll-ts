@@ -2,19 +2,16 @@ export interface Action {
   type: string
 }
 
+export type Polls = Pick<PollTemplateItemType[], number>
 export type PrimaryKey = number
-
 export type PollQuestionItem = string
-
 export type QuestionsPayload = Array<{ answers: string[]; title: string }>
-
-export type QuestionHash = string
+export type QuestionHash = string | number
 export type QuestionTitle = string
-export type QuestionAnswerHash = string
+export type QuestionAnswerHash = string | number
 export type QuestionAnswerTitle = string
 export type QuestionContainerItem = { title: QuestionTitle; answers: Record<QuestionAnswerHash, QuestionAnswerTitle> }
 export type QuestionContainer = Record<QuestionHash, QuestionContainerItem>
-
 export type AnswerSignature = { aid: number; count: number }
 export type AnswerOption = { answer: string; id: number; index: number; pollQuestion: number }
 export type Question = {
@@ -43,7 +40,7 @@ export interface UserState {
 }
 
 export interface PollState {
-  polls: Pick<PollTemplateItemType[], number>
+  polls: Polls
   pollsLoading: boolean
   pollsLoadingFailed: boolean
   pollCreating: boolean
@@ -54,6 +51,8 @@ export interface PollState {
   pollEditingFailed: boolean
   pollQuestionsCreating: boolean
   pollQuestionsCreatingFailed: boolean
+  pollQuestionsEditing: boolean
+  pollQuestionsEditingFailed: boolean
 }
 
 export interface StoreRootState {

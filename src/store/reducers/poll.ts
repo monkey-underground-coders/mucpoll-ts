@@ -20,7 +20,10 @@ const initialState: PollState = {
   pollEditingFailed: false,
   // Poll question creating
   pollQuestionsCreating: false,
-  pollQuestionsCreatingFailed: false
+  pollQuestionsCreatingFailed: false,
+  // Poll question editing
+  pollQuestionsEditing: false,
+  pollQuestionsEditingFailed: false
 }
 
 export const pollReducer = createReducer<PollState, Action>(
@@ -83,6 +86,27 @@ export const pollReducer = createReducer<PollState, Action>(
       pollQuestionsCreatingFailed: true
     }),
 
+    // Poll questions editing
+    [ActionTypes.POLL.EDIT_POLL_QUESTIONS_START]: (state: PollState, action: any) => ({
+      ...state,
+      pollQuestionsEditing: true,
+      pollQuestionsEditingFailed: false
+    }),
+
+    [ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS]: (state: PollState, action: any) => ({
+      ...state,
+      polls: { ...state.polls, [action.payload.pid]: action.payload.nextData },
+      pollQuestionsEditing: false,
+      pollQuestionsEditingFailed: false
+    }),
+
+    [ActionTypes.POLL.EDIT_POLL_QUESTIONS_FAIL]: (state: PollState, action: any) => ({
+      ...state,
+      pollQuestionsEditing: false,
+      pollQuestionsEditingFailed: true
+    }),
+
+    // Poll editing
     [ActionTypes.POLL.EDIT_POLL_START]: (state: PollState, action: any) => ({
       ...state,
       pollEditing: true,

@@ -1,14 +1,15 @@
 import React from 'react'
 import PollTemplateItem from '../../components/PollTemplateItem'
-import { PollTemplateItemType, StoreRootState } from '#/store/types'
+import { PollTemplateItemType, StoreRootState, Polls } from '#/store/types'
 import { getPolls, deletePoll, editPoll } from '#/store/actions/poll'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
 import './index.scss'
 import Loader from '#/components/Loader'
+import EditPollQuestionsModal from '../../components/EditPollQuestionsModal'
 
 interface PollTemplatesProps extends RouteComponentProps {
-  polls: Pick<PollTemplateItemType[], number>
+  polls: Polls
   pollsLoading: boolean
   pollsLoadingFailed: boolean
   pollDeleting: boolean
@@ -21,6 +22,11 @@ interface PollTemplatesProps extends RouteComponentProps {
 }
 
 const PollTemplates = (props: PollTemplatesProps) => {
+  const [editPollQuestionsModalData, setEditPollQuestionsModalData] = React.useState<{
+    isOpen: boolean
+    pid: number | null
+  }>({ isOpen: false, pid: null })
+
   React.useEffect(() => {
     props.getPolls()
   }, [])
@@ -38,6 +44,7 @@ const PollTemplates = (props: PollTemplatesProps) => {
       navigateToPoll={() => navigateToPoll(poll.id)}
       deletePoll={() => props.deletePoll(poll.id)}
       editPoll={props.editPoll}
+      editPollQuestions={() => setEditPollQuestionsModalData({ isOpen: true, pid: poll.id })}
       pollDeleting={props.pollDeleting}
       pollEditing={props.pollEditing}
     />
@@ -50,7 +57,14 @@ const PollTemplates = (props: PollTemplatesProps) => {
       ) : props.pollsLoading ? (
         <Loader />
       ) : (
-        <div className="templates-list__inner">{renderedPolls}</div>
+        <>
+          <div className="templates-list__inner">{renderedPolls}</div>
+          <EditPollQuestionsModal
+            isOpen={editPollQuestionsModalData.isOpen}
+            pid={editPollQuestionsModalData.pid}
+            toggle={() => setEditPollQuestionsModalData({ isOpen: false, pid: null })}
+          />
+        </>
       )}
     </div>
   )

@@ -1,4 +1,4 @@
-import { StoreRootState, QuestionsPayload } from '../types'
+import { StoreRootState, QuestionsPayload, PollTemplateItemType } from '../types'
 import apiRoutes from '#/agent/api'
 import ActionTypes from '.'
 import { Dispatch, Action } from 'redux'
@@ -25,7 +25,7 @@ export const createQuestionsForPoll = (pid: number, questions: QuestionsPayload)
   getState: () => StoreRootState
 ) => {
   dispatch({ type: ActionTypes.POLL.CREATE_POLL_QUESTIONS_START })
-  return postRequest(apiRoutes.createPollQuestions(pid), questions)
+  return postRequest(apiRoutes.pollQuestion(pid), questions)
     .then((poll: any) => {
       dispatch({ type: ActionTypes.POLL.CREATE_POLL_QUESTIONS_SUCCESS, payload: { poll } })
       return poll
@@ -90,5 +90,26 @@ export const editPoll = (pid: number, name: string) => (
     .catch(err => {
       console.warn(err)
       dispatch({ type: ActionTypes.POLL.EDIT_POLL_FAIL })
+    })
+}
+
+export const editPollQuestions = (
+  pid: number,
+  updatedQuestions: Array<{ title: string; qid: number; index: number; answers: string[] }>,
+  createdQuestions: Array<{ title: string; answers: string[] }>
+) => (dispatch: ThunkDispatch<StoreRootState, any, Action>, getState: () => StoreRootState) => {
+  dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_START })
+
+  return Promise.all([
+    putRequest(apiRoutes.pollQuestion(pid as number), updatedQuestions),
+    ...(createdQuestions.length ? [postRequest(apiRoutes.pollQuestion(pid as number), createdQuestions)] : [])
+  ])
+    .then(data => {
+      const nextData = data.length > 1 ? data[1] : data[0]
+      dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS, payload: { pid, nextData } })
+    })
+    .catch(err => {
+      console.warn(err)
+      dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_FAIL })
     })
 }

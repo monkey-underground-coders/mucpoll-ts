@@ -10,6 +10,7 @@ interface PollTemplateItemProps {
   deletePoll: () => void
   navigateToPoll: () => void
   editPoll: (pid: number, title: string) => Promise<any>
+  editPollQuestions: () => void
 }
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
@@ -51,10 +52,10 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
           </div>
           <div className="templates-list__item__general__info">
             <div className="templates-list__item__general__info__questions">
-              <Link to="#">
+              <button type="button" className="btn btn-link" onClick={props.editPollQuestions}>
                 <i className="fas fa-link"></i>
                 <span className="ml-2">Edit questions</span>
-              </Link>
+              </button>
             </div>
 
             <div className="templates-list__item__general__info__votes">
