@@ -1,7 +1,7 @@
 import React from 'react'
 import PollTemplateItem from '../../components/PollTemplateItem'
 import { PollTemplateItemType, StoreRootState } from '#/store/types'
-import { getPolls, deletePoll } from '#/store/actions/poll'
+import { getPolls, deletePoll, editPoll } from '#/store/actions/poll'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
 import './index.scss'
@@ -13,8 +13,11 @@ interface PollTemplatesProps extends RouteComponentProps {
   pollsLoadingFailed: boolean
   pollDeleting: boolean
   pollDeletingFailed: boolean
+  pollEditing: boolean
+  pollEditingFailed: boolean
   getPolls: () => Promise<any>
   deletePoll: (pid: number) => Promise<any>
+  editPoll: (pid: number, title: string) => Promise<any>
 }
 
 const PollTemplates = (props: PollTemplatesProps) => {
@@ -34,7 +37,9 @@ const PollTemplates = (props: PollTemplatesProps) => {
       item={poll}
       navigateToPoll={() => navigateToPoll(poll.id)}
       deletePoll={() => props.deletePoll(poll.id)}
+      editPoll={props.editPoll}
       pollDeleting={props.pollDeleting}
+      pollEditing={props.pollEditing}
     />
   ))
 
@@ -58,8 +63,10 @@ export default withRouter(
       pollsLoading: store.poll.pollsLoading,
       pollsLoadingFailed: store.poll.pollsLoadingFailed,
       pollDeleting: store.poll.pollDeleting,
-      pollDeletingFailed: store.poll.pollDeletingFailed
+      pollDeletingFailed: store.poll.pollDeletingFailed,
+      pollEditing: store.poll.pollEditing,
+      pollEditingFailed: store.poll.pollEditingFailed
     }),
-    { getPolls, deletePoll }
+    { getPolls, deletePoll, editPoll }
   )(PollTemplates)
 )

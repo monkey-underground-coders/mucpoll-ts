@@ -27,7 +27,6 @@ const CreatePollModal = (props: CreatePollModalProps) => {
     if (pollTitle) {
       const questions = constructQuestionsToRequest()
       props.createPoll(pollTitle, questions).then((json: any) => {
-        console.log(json)
         props.toggleModal()
       })
     }

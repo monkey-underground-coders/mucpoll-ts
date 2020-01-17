@@ -77,3 +77,18 @@ export const deletePoll = (pid: number) => (
       dispatch({ type: ActionTypes.POLL.DELETE_POLL_FAIL })
     })
 }
+
+export const editPoll = (pid: number, name: string) => (
+  dispatch: ThunkDispatch<StoreRootState, any, Action>,
+  getState: () => StoreRootState
+) => {
+  dispatch({ type: ActionTypes.POLL.EDIT_POLL_START })
+  return putRequest(apiRoutes.poll(pid), { name })
+    .then(() => {
+      dispatch({ type: ActionTypes.POLL.EDIT_POLL_SUCCESS, payload: { pid, name } })
+    })
+    .catch(err => {
+      console.warn(err)
+      dispatch({ type: ActionTypes.POLL.EDIT_POLL_FAIL })
+    })
+}

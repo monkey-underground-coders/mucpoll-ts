@@ -4,12 +4,27 @@ import { PollTemplateItemType } from '#/store/types'
 
 interface PollTemplateItemProps {
   item: PollTemplateItemType
-  navigateToPoll: () => void
-  deletePoll: () => void
   pollDeleting: boolean
+  pollEditing: boolean
+  deletePoll: () => void
+  navigateToPoll: () => void
+  editPoll: (pid: number, title: string) => Promise<any>
 }
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
+  const [newTitle, setNewTitle] = React.useState<string>(props.item.name)
+  const [editMode, setEditMode] = React.useState<boolean>(false)
+
+  const toggleEdit = () => {
+    if (editMode) {
+      props.editPoll(props.item.id, newTitle).then(() => {
+        setEditMode(!editMode)
+      })
+    } else {
+      setEditMode(!editMode)
+    }
+  }
+
   return (
     <div className="templates-list__item">
       <div className="templates-list__item__selection">
@@ -20,7 +35,19 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
 
       <div className="templates-list__item__naming">
         <div className="templates-list__item__general">
-          <div className="templates-list__item__general__name">{props.item.name}</div>
+          <div className="templates-list__item__general__name">
+            {editMode ? (
+              <input
+                type="text"
+                className="form-control"
+                value={newTitle}
+                onChange={e => setNewTitle(e.target.value)}
+                placeholder="Poll title"
+              />
+            ) : (
+              props.item.name
+            )}
+          </div>
           <div className="templates-list__item__general__info">
             <div className="templates-list__item__general__info__questions">
               <Link to="#">
@@ -49,8 +76,8 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
 
         <div className="templates-list__item__actions">
           <div className="templates-list__item__actions__action">
-            <button className="btn btn-primary btn-not-rounded">
-              <i className="fas fa-pen"></i>
+            <button className="btn btn-primary btn-not-rounded" onClick={toggleEdit} disabled={props.pollEditing}>
+              {editMode ? <i className="fas fa-check"></i> : <i className="fas fa-pen"></i>}
             </button>
           </div>
           <div className="templates-list__item__actions__action">

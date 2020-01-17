@@ -51,10 +51,11 @@ export const getRequest = (url: string) =>
     headers: constructRequestHeaders()
   }).then(initialResponseHandler)
 
-export const putRequest = (url: string) =>
+export const putRequest = (url: string, body = {}) =>
   fetch(url, {
     method: 'PUT',
-    headers: constructRequestHeaders()
+    headers: constructRequestHeaders(),
+    body: JSON.stringify(body)
   }).then(initialResponseHandler)
 
 export const deleteRequest = (url: string) =>

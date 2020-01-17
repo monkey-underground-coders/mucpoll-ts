@@ -50,6 +50,8 @@ export interface PollState {
   pollCreatingFailed: boolean
   pollDeleting: boolean
   pollDeletingFailed: boolean
+  pollEditing: boolean
+  pollEditingFailed: boolean
   pollQuestionsCreating: boolean
   pollQuestionsCreatingFailed: boolean
 }
