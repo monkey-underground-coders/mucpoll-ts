@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { PollTemplateItemType } from '#/store/types'
+import Loader from '#/components/Loader'
 
 interface PollTemplateItemProps {
   item: PollTemplateItemType
@@ -77,7 +78,15 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
         <div className="templates-list__item__actions">
           <div className="templates-list__item__actions__action">
             <button className="btn btn-primary btn-not-rounded" onClick={toggleEdit} disabled={props.pollEditing}>
-              {editMode ? <i className="fas fa-check"></i> : <i className="fas fa-pen"></i>}
+              {editMode ? (
+                props.pollEditing ? (
+                  <Loader small={true} />
+                ) : (
+                  <i className="fas fa-check"></i>
+                )
+              ) : (
+                <i className="fas fa-pen"></i>
+              )}
             </button>
           </div>
           <div className="templates-list__item__actions__action">
