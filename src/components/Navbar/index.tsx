@@ -72,7 +72,7 @@ const Navbar = (props: NavbarProps) => {
             </Nav>
             <Nav navbar>
               <NavItem>
-                <NavLink tag={Link} to="/auth" onClick={handleSubmit}>
+                <NavLink tag={Link} to="/" onClick={handleSubmit}>
                   <span>Logout</span>
                 </NavLink>
               </NavItem>

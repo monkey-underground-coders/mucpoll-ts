@@ -126,13 +126,14 @@ const EditPollModal = (props: EditPollModalProps) => {
       (updatedQuestionsAcc: Array<{ title: string; answers: string[] }>, questionKey: number) => {
         const _originalQuestion = pollData.questions?.find((q: Question) => q.id === questionKey)
         const _nextQuestion = newlyCreatedQuestions[questionKey]
+        const _answers = Object.values(_nextQuestion.answers).filter(e => e)
 
-        if (Object.values(_nextQuestion.answers).length) {
+        if (_answers.length) {
           return [
             ...updatedQuestionsAcc,
             {
               title: _nextQuestion.title,
-              answers: Object.values(_nextQuestion.answers)
+              answers: _answers
             }
           ]
         }
@@ -147,11 +148,9 @@ const EditPollModal = (props: EditPollModalProps) => {
     const createdQuestions = createdQuestionsKeys.reduce(
       (createdQuestionsAcc: Array<{ title: string; answers: string[] }>, questionKey: string) => {
         const _createdQuestion = newlyCreatedQuestions[questionKey]
-        if (Object.values(_createdQuestion.answers).length) {
-          return [
-            ...createdQuestionsAcc,
-            { title: _createdQuestion.title, answers: Object.values(_createdQuestion.answers) }
-          ]
+        const _answers = Object.values(_createdQuestion.answers).filter(e => e)
+        if (_answers.length) {
+          return [...createdQuestionsAcc, { title: _createdQuestion.title, answers: _answers }]
         }
         return createdQuestionsAcc
       },
