@@ -78,35 +78,17 @@ export const deletePoll = (pid: number) => (
     })
 }
 
-export const editPoll = (pid: number, name: string) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
-) => {
-  dispatch({ type: ActionTypes.POLL.EDIT_POLL_START })
-  return putRequest(apiRoutes.poll(pid), { name })
-    .then(() => {
-      dispatch({ type: ActionTypes.POLL.EDIT_POLL_SUCCESS, payload: { pid, name } })
-    })
-    .catch(err => {
-      console.warn(err)
-      dispatch({ type: ActionTypes.POLL.EDIT_POLL_FAIL })
-    })
-}
-
-export const editPollQuestions = (
+export const editPoll = (
   pid: number,
-  updatedQuestions: Array<{ title: string; qid: number; index: number; answers: string[] }>,
-  createdQuestions: Array<{ title: string; answers: string[] }>
+  name: string,
+  list: Array<{ title: string; answers: string[] }>,
+  tags: string[]
 ) => (dispatch: ThunkDispatch<StoreRootState, any, Action>, getState: () => StoreRootState) => {
   dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_START })
-
-  return Promise.all([
-    putRequest(apiRoutes.pollQuestion(pid as number), updatedQuestions),
-    ...(createdQuestions.length ? [postRequest(apiRoutes.pollQuestion(pid as number), createdQuestions)] : [])
-  ])
+  return putRequest(apiRoutes.poll(pid as number), { name, list, tags })
     .then(data => {
-      const nextData = data.length > 1 ? data[1] : data[0]
-      dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS, payload: { pid, nextData } })
+      dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS, payload: { pid } })
+      console.log(data)
     })
     .catch(err => {
       console.warn(err)

@@ -9,24 +9,10 @@ interface PollTemplateItemProps {
   pollEditing: boolean
   deletePoll: () => void
   navigateToPoll: () => void
-  editPoll: (pid: number, title: string) => Promise<any>
-  editPollQuestions: () => void
+  editPoll: () => void
 }
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
-  const [newTitle, setNewTitle] = React.useState<string>(props.item.name)
-  const [editMode, setEditMode] = React.useState<boolean>(false)
-
-  const toggleEdit = () => {
-    if (editMode) {
-      props.editPoll(props.item.id, newTitle).then(() => {
-        setEditMode(!editMode)
-      })
-    } else {
-      setEditMode(!editMode)
-    }
-  }
-
   return (
     <div className="templates-list__item">
       <div className="templates-list__item__selection">
@@ -37,31 +23,14 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
 
       <div className="templates-list__item__naming">
         <div className="templates-list__item__general">
-          <div className="templates-list__item__general__name">
-            {editMode ? (
-              <input
-                type="text"
-                className="form-control"
-                value={newTitle}
-                onChange={e => setNewTitle(e.target.value)}
-                placeholder="Poll title"
-              />
-            ) : (
-              props.item.name
-            )}
-          </div>
+          <div className="templates-list__item__general__name">{props.item.name}</div>
           <div className="templates-list__item__general__info">
-            <div className="templates-list__item__general__info__questions">
-              <button type="button" className="btn btn-link" onClick={props.editPollQuestions}>
-                <i className="fas fa-link"></i>
-                <span className="ml-2">Edit questions</span>
-              </button>
-            </div>
+            {/* <div className="templates-list__item__general__info__questions"></div>
 
             <div className="templates-list__item__general__info__votes">
               <i className="fas fa-eye"></i>
               <span className="ml-2">63</span>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -78,16 +47,8 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
 
         <div className="templates-list__item__actions">
           <div className="templates-list__item__actions__action">
-            <button className="btn btn-primary btn-not-rounded" onClick={toggleEdit} disabled={props.pollEditing}>
-              {editMode ? (
-                props.pollEditing ? (
-                  <Loader small={true} />
-                ) : (
-                  <i className="fas fa-check"></i>
-                )
-              ) : (
-                <i className="fas fa-pen"></i>
-              )}
+            <button className="btn btn-primary btn-not-rounded" onClick={props.editPoll} disabled={props.pollEditing}>
+              <i className="fas fa-pen"></i>
             </button>
           </div>
           <div className="templates-list__item__actions__action">

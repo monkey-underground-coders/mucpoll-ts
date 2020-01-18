@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
 import './index.scss'
 import Loader from '#/components/Loader'
-import EditPollQuestionsModal from '../../components/EditPollQuestionsModal'
+import EditPollModal from '../../components/EditPollModal'
 
 interface PollTemplatesProps extends RouteComponentProps {
   polls: Polls
@@ -18,11 +18,10 @@ interface PollTemplatesProps extends RouteComponentProps {
   pollEditingFailed: boolean
   getPolls: () => Promise<any>
   deletePoll: (pid: number) => Promise<any>
-  editPoll: (pid: number, title: string) => Promise<any>
 }
 
 const PollTemplates = (props: PollTemplatesProps) => {
-  const [editPollQuestionsModalData, setEditPollQuestionsModalData] = React.useState<{
+  const [EditPollModalData, setEditPollModalData] = React.useState<{
     isOpen: boolean
     pid: number | null
   }>({ isOpen: false, pid: null })
@@ -43,8 +42,7 @@ const PollTemplates = (props: PollTemplatesProps) => {
       item={poll}
       navigateToPoll={() => navigateToPoll(poll.id)}
       deletePoll={() => props.deletePoll(poll.id)}
-      editPoll={props.editPoll}
-      editPollQuestions={() => setEditPollQuestionsModalData({ isOpen: true, pid: poll.id })}
+      editPoll={() => setEditPollModalData({ isOpen: true, pid: poll.id })}
       pollDeleting={props.pollDeleting}
       pollEditing={props.pollEditing}
     />
@@ -59,10 +57,10 @@ const PollTemplates = (props: PollTemplatesProps) => {
       ) : (
         <>
           <div className="templates-list__inner">{renderedPolls}</div>
-          <EditPollQuestionsModal
-            isOpen={editPollQuestionsModalData.isOpen}
-            pid={editPollQuestionsModalData.pid}
-            toggle={() => setEditPollQuestionsModalData({ isOpen: false, pid: null })}
+          <EditPollModal
+            isOpen={EditPollModalData.isOpen}
+            pid={EditPollModalData.pid}
+            toggle={() => setEditPollModalData({ isOpen: false, pid: null })}
           />
         </>
       )}
@@ -81,6 +79,6 @@ export default withRouter(
       pollEditing: store.poll.pollEditing,
       pollEditingFailed: store.poll.pollEditingFailed
     }),
-    { getPolls, deletePoll, editPoll }
+    { getPolls, deletePoll }
   )(PollTemplates)
 )

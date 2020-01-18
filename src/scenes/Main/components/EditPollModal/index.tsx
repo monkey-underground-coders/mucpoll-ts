@@ -13,25 +13,32 @@ import {
 } from '#/store/types'
 import _ from 'lodash'
 import PollQuestionBare from '../PollQuestionBare'
-import { editPollQuestions } from '#/store/actions/poll'
+import { editPoll } from '#/store/actions/poll'
 
-interface EditPollQuestionsModalProps {
+interface EditPollModalProps {
   isOpen: boolean
   toggle: () => void
   pid: number | null
   polls?: Polls
-  editPollQuestions: (
+  editPoll: (
     pid: number,
-    updatedQuestions: Array<{ title: string; qid: number; index: number; answers: string[] }>,
-    createdQuestions: Array<{ title: string; answers: string[] }>
+    name: string,
+    list: Array<{ title: string; answers: string[] }>,
+    tags: string[]
   ) => Promise<any>
   pollQuestionsEditing: boolean
 }
 
-const EditPollQuestionsModal = (props: EditPollQuestionsModalProps) => {
-  const [pollData, setPollData] = React.useState<{ name: string | null; questions: Array<Question> | null }>({
+const EditPollModal = (props: EditPollModalProps) => {
+  const [pollName, setPollName] = React.useState<string | null>(null)
+  const [pollData, setPollData] = React.useState<{
+    name: string | null
+    questions: Array<Question> | null
+    tags: string[] | null
+  }>({
     name: null,
-    questions: null
+    questions: null,
+    tags: null
   })
   const [newlyCreatedQuestions, setNewlyCreatedQuestions] = React.useState<QuestionContainer>({})
 
@@ -55,18 +62,13 @@ const EditPollQuestionsModal = (props: EditPollQuestionsModalProps) => {
           }),
           {}
         )
-        setPollData({ name: currentPoll.name, questions: currentPoll.questions })
+        setPollName(currentPoll.name)
+        setPollData({ name: currentPoll.name, questions: currentPoll.questions, tags: currentPoll.tags })
         setNewlyCreatedQuestions(constructQuestionsContainer)
       }
     }
   }, [props.pid])
 
-  /**
-   * Question actions
-   * @function onQuestionCreate Creation handler
-   * @function onQuestionChange Change handler
-   * @function onQuestionDelete Deletion handler
-   */
   const onQuestionCreate = () => {
     const hash = `QuestionHash_${new Date().getTime()}`
     setNewlyCreatedQuestions({ ...newlyCreatedQuestions, [hash]: { title: '', answers: {} } })
@@ -80,12 +82,6 @@ const EditPollQuestionsModal = (props: EditPollQuestionsModalProps) => {
     setNewlyCreatedQuestions(_.omit(newlyCreatedQuestions, hash))
   }
 
-  /**
-   * Answer actions
-   * @function onAnswerCreate Creation handler
-   * @function onAnswerChange Change handler
-   * @function onAnswerDelete Deletion handler
-   */
   const onAnswerCreate = (questionHash: QuestionHash) => {
     const createdHash = `QuestionAnswer_${new Date().getTime()}`
     setNewlyCreatedQuestions({
@@ -127,22 +123,21 @@ const EditPollQuestionsModal = (props: EditPollQuestionsModalProps) => {
       .map(questionKey => _.toNumber(questionKey))
 
     const updatedQuestions = updatedQuestionsKeys.reduce(
-      (
-        updatedQuestionsAcc: Array<{ title: string; qid: number; index: number; answers: string[] }>,
-        questionKey: number
-      ) => {
+      (updatedQuestionsAcc: Array<{ title: string; answers: string[] }>, questionKey: number) => {
         const _originalQuestion = pollData.questions?.find((q: Question) => q.id === questionKey)
         const _nextQuestion = newlyCreatedQuestions[questionKey]
 
-        return [
-          ...updatedQuestionsAcc,
-          {
-            title: _nextQuestion.title,
-            qid: questionKey,
-            index: _originalQuestion!.index,
-            answers: Object.values(_nextQuestion.answers)
-          }
-        ]
+        if (Object.values(_nextQuestion.answers).length) {
+          return [
+            ...updatedQuestionsAcc,
+            {
+              title: _nextQuestion.title,
+              answers: Object.values(_nextQuestion.answers)
+            }
+          ]
+        }
+
+        return updatedQuestionsAcc
       },
       []
     )
@@ -152,35 +147,60 @@ const EditPollQuestionsModal = (props: EditPollQuestionsModalProps) => {
     const createdQuestions = createdQuestionsKeys.reduce(
       (createdQuestionsAcc: Array<{ title: string; answers: string[] }>, questionKey: string) => {
         const _createdQuestion = newlyCreatedQuestions[questionKey]
-        return [
-          ...createdQuestionsAcc,
-          { title: _createdQuestion.title, answers: Object.values(_createdQuestion.answers) }
-        ]
+        if (Object.values(_createdQuestion.answers).length) {
+          return [
+            ...createdQuestionsAcc,
+            { title: _createdQuestion.title, answers: Object.values(_createdQuestion.answers) }
+          ]
+        }
+        return createdQuestionsAcc
       },
       []
     )
 
-    props.editPollQuestions(props.pid as number, updatedQuestions, createdQuestions).then(() => {
-      props.toggle()
-    })
+    props
+      .editPoll(
+        props.pid as number,
+        pollData.name as string,
+        [...updatedQuestions, ...createdQuestions],
+        pollData.tags as string[]
+      )
+      .then(() => {
+        props.toggle()
+      })
   }
 
   return (
     <Modal size="lg" isOpen={props.isOpen} toggle={props.toggle} contentClassName="alert alert-primary">
-      <ModalHeader toggle={props.toggle}>Edit questions for {pollData.name}</ModalHeader>
+      <ModalHeader toggle={props.toggle}>Edit questions for {pollName}</ModalHeader>
       <ModalBody>
         {pollData.name ? (
-          <div className="mt-2">
-            <PollQuestionBare
-              onQuestionCreate={onQuestionCreate}
-              onQuestionChange={onQuestionChange}
-              onQuestionDelete={onQuestionDelete}
-              onAnswerChange={onAnswerChange}
-              onAnswerDelete={onAnswerDelete}
-              onAnswerCreate={onAnswerCreate}
-              container={newlyCreatedQuestions}
-            />
-          </div>
+          <>
+            <div className="box box-bordered">
+              <div className="box__header">Poll title</div>
+              <div className="box__header">
+                <input
+                  type="text"
+                  className="form-control"
+                  value={pollData.name}
+                  onChange={e => setPollData({ ...pollData, name: e.target.value })}
+                  placeholder="Poll"
+                  required
+                />
+              </div>
+            </div>
+            <div className="mt-2">
+              <PollQuestionBare
+                onQuestionCreate={onQuestionCreate}
+                onQuestionChange={onQuestionChange}
+                onQuestionDelete={onQuestionDelete}
+                onAnswerChange={onAnswerChange}
+                onAnswerDelete={onAnswerDelete}
+                onAnswerCreate={onAnswerCreate}
+                container={newlyCreatedQuestions}
+              />
+            </div>
+          </>
         ) : (
           <div>Loading</div>
         )}
@@ -202,5 +222,5 @@ export default connect(
     polls: store.poll.polls,
     pollQuestionsEditing: store.poll.pollQuestionsEditing
   }),
-  { editPollQuestions }
-)(EditPollQuestionsModal)
+  { editPoll }
+)(EditPollModal)
