@@ -5,7 +5,7 @@ export interface PageProps {
   children: JSX.Element
 }
 
-const Page = (props: any) => {
+const Page = (props: PageProps) => {
   React.useEffect(() => {
     document.title = props.title
     return () => {}
