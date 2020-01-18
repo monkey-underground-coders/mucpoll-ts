@@ -28,7 +28,7 @@ const PollHistory = (props: PollHistoryProps) => {
       setPollHistoryLoading(true)
       getRequest(apiRoutes.pollHistory(parseInt(id)))
         .then((json: any) => {
-          setPollHistoryData(json)
+          setPollHistoryData(json.content)
           setPollHistoryLoading(false)
         })
         .catch(err => {

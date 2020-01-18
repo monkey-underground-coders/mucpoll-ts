@@ -2,9 +2,16 @@ import { StoreRootState, QuestionsPayload, PollTemplateItemType } from '../types
 import apiRoutes from '#/agent/api'
 import ActionTypes from '.'
 import { Dispatch, Action } from 'redux'
-import { getRequest, postRequest, putRequest, deleteRequest } from '#/agent'
+import { getRequest, postRequest, putRequest, deleteRequest, putRequestWithoutHandler } from '#/agent'
 import _ from 'lodash'
 import { ThunkDispatch } from 'redux-thunk'
+
+export const getPoll = (pid: number) => (
+  dispatch: ThunkDispatch<StoreRootState, any, Action>,
+  getState: () => StoreRootState
+) => {
+  return getRequest(apiRoutes.poll(pid))
+}
 
 export const getPolls = () => (
   dispatch: ThunkDispatch<StoreRootState, any, Action>,
@@ -85,10 +92,11 @@ export const editPoll = (
   tags: string[]
 ) => (dispatch: ThunkDispatch<StoreRootState, any, Action>, getState: () => StoreRootState) => {
   dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_START })
-  return putRequest(apiRoutes.poll(pid as number), { name, list, tags })
+  return putRequestWithoutHandler(apiRoutes.poll(pid as number), { name, list, tags })
     .then(data => {
-      dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS, payload: { pid } })
-      console.log(data)
+      dispatch(getPoll(pid)).then(data => {
+        dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS, payload: { pid, nextData: data } })
+      })
     })
     .catch(err => {
       console.warn(err)

@@ -4,9 +4,9 @@ import { PollTemplateItemType, StoreRootState, Polls } from '#/store/types'
 import { getPolls, deletePoll, editPoll } from '#/store/actions/poll'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
-import './index.scss'
 import Loader from '#/components/Loader'
 import EditPollModal from '../../components/EditPollModal'
+import './index.scss'
 
 interface PollTemplatesProps extends RouteComponentProps {
   polls: Polls
@@ -45,7 +45,7 @@ const PollTemplates = (props: PollTemplatesProps) => {
     }
   }
 
-  const polls = React.useMemo(() => Object.values(props.polls), [props.polls])
+  const polls = React.useMemo(() => Object.values(props.polls.content), [props.polls])
 
   const renderedPolls = polls.map((poll: PollTemplateItemType) => (
     <PollTemplateItem

@@ -2,7 +2,15 @@ export interface Action {
   type: string
 }
 
-export type Polls = Pick<PollTemplateItemType[], number>
+export type Polls = {
+  content: Pick<PollTemplateItemType[], number>
+  settings: {
+    totalPages?: number
+    totalElements?: number
+    size?: number
+    number?: number
+  }
+}
 export type PrimaryKey = number
 export type PollQuestionItem = string
 export type QuestionsPayload = Array<{ answers: string[]; title: string }>
@@ -10,7 +18,13 @@ export type QuestionHash = string | number
 export type QuestionTitle = string
 export type QuestionAnswerHash = string | number
 export type QuestionAnswerTitle = string
-export type QuestionContainerItem = { title: QuestionTitle; answers: Record<QuestionAnswerHash, QuestionAnswerTitle> }
+export type QuestionContainerItem = {
+  title: QuestionTitle
+  answers: Record<QuestionAnswerHash, QuestionAnswerTitle>
+  index?: number
+  hash?: string
+  editMode?: boolean
+}
 export type QuestionContainer = Record<QuestionHash, QuestionContainerItem>
 export type AnswerSignature = { aid: number; count: number }
 export type AnswerOption = { answer: string; id: number; index: number; pollQuestion: number }

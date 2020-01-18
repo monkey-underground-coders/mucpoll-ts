@@ -14,6 +14,7 @@ import {
 import _ from 'lodash'
 import PollQuestionBare from '../PollQuestionBare'
 import { editPoll } from '#/store/actions/poll'
+import { reorder } from '#/utils/functions'
 
 interface EditPollModalProps {
   isOpen: boolean
@@ -44,12 +45,12 @@ const EditPollModal = (props: EditPollModalProps) => {
 
   React.useEffect(() => {
     if (props.pid) {
-      const currentPoll = _.get(props.polls, props.pid, null)
+      const currentPoll = _.get(props!.polls!.content, props.pid, null)
       if (currentPoll) {
         const constructQuestionsContainer = currentPoll.questions.reduce(
           (questionsAcc, question: Question) => ({
             ...questionsAcc,
-            [question.id]: {
+            [question.id.toString()]: {
               title: question.question,
               answers: question.answerOptions.reduce(
                 (answersAcc, answerOption: AnswerOption) => ({
@@ -57,7 +58,9 @@ const EditPollModal = (props: EditPollModalProps) => {
                   [answerOption.id]: answerOption.answer
                 }),
                 {}
-              )
+              ),
+              hash: question.id.toString(),
+              editMode: false
             }
           }),
           {}
@@ -71,7 +74,7 @@ const EditPollModal = (props: EditPollModalProps) => {
 
   const onQuestionCreate = () => {
     const hash = `QuestionHash_${new Date().getTime()}`
-    setNewlyCreatedQuestions({ ...newlyCreatedQuestions, [hash]: { title: '', answers: {} } })
+    setNewlyCreatedQuestions({ ...newlyCreatedQuestions, [hash]: { title: '', answers: {}, hash, editMode: true } })
   }
 
   const onQuestionChange = (hash: QuestionHash, value: string) => {
@@ -80,6 +83,20 @@ const EditPollModal = (props: EditPollModalProps) => {
 
   const onQuestionDelete = (hash: QuestionHash) => {
     setNewlyCreatedQuestions(_.omit(newlyCreatedQuestions, hash))
+  }
+
+  const toggleQuestionEditMode = (questionHash: QuestionHash) => {
+    setNewlyCreatedQuestions({
+      ...newlyCreatedQuestions,
+      [questionHash]: {
+        ...newlyCreatedQuestions[questionHash],
+        editMode: !newlyCreatedQuestions[questionHash].editMode
+      }
+    })
+  }
+
+  const getQuestionEditMode = (questionHash: QuestionHash) => {
+    return newlyCreatedQuestions[questionHash].editMode as boolean
   }
 
   const onAnswerCreate = (questionHash: QuestionHash) => {
@@ -111,6 +128,21 @@ const EditPollModal = (props: EditPollModalProps) => {
         answers: { ...newlyCreatedQuestions[questionHash].answers, [answerHash]: nextValue }
       }
     })
+  }
+
+  const onDragEnd = (result: any) => {
+    if (result.destination && result.destination.index !== result.source.index) {
+      const _questions = reorder(Object.values(newlyCreatedQuestions), result.source.index, result.destination.index)
+      setNewlyCreatedQuestions(
+        _questions.reduce(
+          (_nextQuestions: QuestionContainer, _question: any) => ({
+            ..._nextQuestions,
+            [`q${_question.hash}`]: _question
+          }),
+          {}
+        )
+      )
+    }
   }
 
   const updateQuestions = () => {
@@ -190,6 +222,8 @@ const EditPollModal = (props: EditPollModalProps) => {
             </div>
             <div className="mt-2">
               <PollQuestionBare
+                toggleQuestionEditMode={toggleQuestionEditMode}
+                getQuestionEditMode={getQuestionEditMode}
                 onQuestionCreate={onQuestionCreate}
                 onQuestionChange={onQuestionChange}
                 onQuestionDelete={onQuestionDelete}
@@ -197,6 +231,7 @@ const EditPollModal = (props: EditPollModalProps) => {
                 onAnswerDelete={onAnswerDelete}
                 onAnswerCreate={onAnswerCreate}
                 container={newlyCreatedQuestions}
+                onDragEnd={onDragEnd}
               />
             </div>
           </>

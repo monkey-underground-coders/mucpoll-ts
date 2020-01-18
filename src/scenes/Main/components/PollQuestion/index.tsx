@@ -4,26 +4,14 @@ import _ from 'lodash'
 import './index.scss'
 
 interface PollQuestionAnswerProps {
-  hash: QuestionAnswerHash
   answer: string
+  hash: QuestionAnswerHash
+  shouldFocusInputRightAway: boolean
   onDelete: () => void
-  onChange: (hash: QuestionAnswerHash, value: string) => void
   createNextAnswer: () => void
   createNextQuestion: () => void
-  shouldFocusInputRightAway: boolean
   setShouldFocusInputRightAway: (arg: boolean) => void
-}
-
-interface PollQuestionProps {
-  hash: QuestionHash
-  readonly?: boolean
-  question: QuestionContainerItem
-  onAnswerCreate: () => void
-  onAnswerDelete: (answerHash: QuestionAnswerHash) => void
-  onAnswerChange: (answerHash: QuestionAnswerHash, value: string) => void
-  onQuestionCreate: () => void
-  onQuestionDelete: () => void
-  onQuestionChange: (value: string) => void
+  onChange: (hash: QuestionAnswerHash, value: string) => void
 }
 
 const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
@@ -32,7 +20,7 @@ const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
 
   React.useLayoutEffect(() => {
     if (props.shouldFocusInputRightAway && _inputRef.current) {
-      (_inputRef.current as any).focus()
+      ;(_inputRef.current as any).focus()
       props.setShouldFocusInputRightAway(false)
     }
   }, [props.shouldFocusInputRightAway])
@@ -88,13 +76,26 @@ const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
   )
 }
 
-const PollQuestion = (props: PollQuestionProps) => {
+interface PollQuestionProps extends React.ComponentProps<any> {
+  hash: QuestionHash
+  readonly?: boolean
+  question: QuestionContainerItem
+  questionEditMode: boolean
+  onAnswerCreate: () => void
+  onAnswerDelete: (answerHash: QuestionAnswerHash) => void
+  onAnswerChange: (answerHash: QuestionAnswerHash, value: string) => void
+  onQuestionCreate: () => void
+  onQuestionDelete: () => void
+  onQuestionChange: (value: string) => void
+  toggleQuestionEditMode: () => void
+}
+
+const PollQuestion = React.forwardRef((props: PollQuestionProps, ref) => {
   const [shouldFocusNextAnswerInputRightAway, setShouldFocusNextAnswerInputRightAway] = React.useState<boolean>(false)
-  const [editMode, setEditMode] = React.useState<Boolean>(true)
   const { title, answers } = props.question
 
   const toggleEdit = () => {
-    !!title && setEditMode(!editMode)
+    !!title && props.toggleQuestionEditMode()
   }
 
   const onQuestionInputKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -127,7 +128,7 @@ const PollQuestion = (props: PollQuestionProps) => {
     )
   })
 
-  const renderedTitle = editMode ? (
+  const renderedTitle = props.questionEditMode ? (
     <input
       type="text"
       placeholder="Question title"
@@ -143,7 +144,7 @@ const PollQuestion = (props: PollQuestionProps) => {
   )
 
   return (
-    <div className="question-item">
+    <div>
       <div className="question-item__layout">
         <div className="question-item__layout__title">
           <div className="question-item__layout__title__name">{renderedTitle}</div>
@@ -158,7 +159,7 @@ const PollQuestion = (props: PollQuestionProps) => {
               <span className="ml-1">Answer</span>
             </button>
 
-            {editMode ? (
+            {props.questionEditMode ? (
               <button type="button" className="btn-list btn" onClick={toggleEdit}>
                 <i className="fas fa-check"></i>
                 <span className="ml-1">Save</span>
@@ -186,6 +187,6 @@ const PollQuestion = (props: PollQuestionProps) => {
       </div>
     </div>
   )
-}
+})
 
 export default PollQuestion

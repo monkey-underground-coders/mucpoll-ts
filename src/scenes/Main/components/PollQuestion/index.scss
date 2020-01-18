@@ -1,10 +1,15 @@
 .question-item {
   color: #373737;
+  margin-top: 10px;
+  padding-top: 15px;
+
+  &__first {
+    margin-top: 0;
+    padding-top: 0;
+  }
 
   &:not(:first-child) {
     border-top: thin solid rgba(97, 106, 120, 0.07);
-    margin-top: 10px;
-    padding-top: 15px;
   }
 
   &__layout {

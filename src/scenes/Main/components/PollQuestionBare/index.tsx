@@ -1,42 +1,61 @@
 import React from 'react'
 import PollQuestion from '../PollQuestion'
 import { QuestionContainer, QuestionAnswerHash, QuestionHash } from '#/store/types'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 interface PollQuestionBareProps {
   container: QuestionContainer
   onQuestionCreate: () => void
   onQuestionDelete: (hash: QuestionHash) => void
   onQuestionChange: (hash: QuestionHash, value: string) => void
+  toggleQuestionEditMode: (hash: QuestionHash) => void
+  getQuestionEditMode: (hash: QuestionHash) => boolean
   onAnswerCreate: (hash: QuestionHash) => void
   onAnswerDelete: (hash: QuestionHash, answerHash: QuestionAnswerHash) => void
   onAnswerChange: (hash: QuestionHash, answerHash: QuestionAnswerHash, nextValue: string) => void
+  onDragEnd: (result: any) => void
 }
 
 const PollQuestionBare = (props: PollQuestionBareProps) => {
-  const getQuestions = React.useMemo(() => Object.keys(props.container), [props.container])
-  const renderQuestions = () => {
-    if (getQuestions.length) {
-      return getQuestions.map((questionHash: QuestionHash, index: number) => {
+  const questionsList = React.useMemo(() => Object.keys(props.container), [props.container])
+
+  const renderedQuestions = React.useMemo(() => {
+    if (questionsList.length) {
+      return questionsList.map((questionHash: QuestionHash, index: number) => {
+        const questionClassName = ['question-item', index === 0 ? 'question-item__first' : ''].join(' ')
         const question = props.container[questionHash]
         return (
-          <PollQuestion
-            key={`q${index}`}
-            hash={questionHash}
-            question={question}
-            onQuestionCreate={props.onQuestionCreate}
-            onQuestionDelete={() => props.onQuestionDelete(questionHash)}
-            onQuestionChange={(value: string) => props.onQuestionChange(questionHash, value)}
-            onAnswerChange={(answerHash: QuestionAnswerHash, value: string) =>
-              props.onAnswerChange(questionHash, answerHash, value)
-            }
-            onAnswerCreate={() => props.onAnswerCreate(questionHash)}
-            onAnswerDelete={(answerHash: QuestionAnswerHash) => props.onAnswerDelete(questionHash, answerHash)}
-          />
+          <Draggable draggableId={questionHash as string} index={index} key={questionHash}>
+            {provided => (
+              <div
+                className={questionClassName}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <PollQuestion
+                  key={`q${index}`}
+                  hash={questionHash}
+                  question={question}
+                  onQuestionCreate={props.onQuestionCreate}
+                  onQuestionDelete={() => props.onQuestionDelete(questionHash)}
+                  onQuestionChange={(value: string) => props.onQuestionChange(questionHash, value)}
+                  onAnswerChange={(answerHash: QuestionAnswerHash, value: string) =>
+                    props.onAnswerChange(questionHash, answerHash, value)
+                  }
+                  onAnswerCreate={() => props.onAnswerCreate(questionHash)}
+                  onAnswerDelete={(answerHash: QuestionAnswerHash) => props.onAnswerDelete(questionHash, answerHash)}
+                  toggleQuestionEditMode={() => props.toggleQuestionEditMode(questionHash)}
+                  questionEditMode={props.getQuestionEditMode(questionHash)}
+                />
+              </div>
+            )}
+          </Draggable>
         )
       })
     }
     return 'No questions created'
-  }
+  }, [questionsList])
 
   return (
     <div className="box box-bordered mt-2">
@@ -51,8 +70,19 @@ const PollQuestionBare = (props: PollQuestionBareProps) => {
       </div>
 
       <div className="box__body">
-        <div>{renderQuestions()}</div>
-        {!!getQuestions.length && (
+        <div>
+          <DragDropContext onDragEnd={props.onDragEnd}>
+            <Droppable droppableId="list">
+              {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {renderedQuestions}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
+        {!!questionsList.length && (
           <div className="mt-4">
             <div className="text-muted small">
               <div>Shortcuts:</div>

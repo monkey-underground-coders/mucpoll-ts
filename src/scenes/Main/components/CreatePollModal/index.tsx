@@ -12,6 +12,7 @@ import {
   StoreRootState
 } from '#/store/types'
 import _ from 'lodash'
+import { reorder } from '#/utils/functions'
 
 interface CreatePollModalProps {
   isOpen: boolean
@@ -55,7 +56,7 @@ const CreatePollModal = (props: CreatePollModalProps) => {
    */
   const onQuestionCreate = () => {
     const newHash = `q${new Date().getTime()}`
-    setQuestions({ ...questions, [newHash]: { title: '', answers: {} } })
+    setQuestions({ ...questions, [newHash]: { title: '', answers: {}, hash: newHash, editMode: true } })
   }
 
   const onQuestionChange = (hash: QuestionHash, value: string) => {
@@ -64,6 +65,17 @@ const CreatePollModal = (props: CreatePollModalProps) => {
 
   const onQuestionDelete = (hash: QuestionHash) => {
     setQuestions(_.omit(questions, hash))
+  }
+
+  const toggleQuestionEditMode = (questionHash: QuestionHash) => {
+    setQuestions({
+      ...questions,
+      [questionHash]: { ...questions[questionHash], editMode: !questions[questionHash].editMode }
+    })
+  }
+
+  const getQuestionEditMode = (questionHash: QuestionHash) => {
+    return questions[questionHash].editMode as boolean
   }
 
   /**
@@ -103,6 +115,21 @@ const CreatePollModal = (props: CreatePollModalProps) => {
     })
   }
 
+  const onDragEnd = (result: any) => {
+    if (result.destination && result.destination.index !== result.source.index) {
+      const _questions = reorder(Object.values(questions), result.source.index, result.destination.index)
+      setQuestions(
+        _questions.reduce(
+          (_nextQuestions: QuestionContainer, _question: any) => ({
+            ..._nextQuestions,
+            [_question.hash]: _question
+          }),
+          {}
+        )
+      )
+    }
+  }
+
   return (
     <Modal size="lg" isOpen={props.isOpen} toggle={props.toggleModal} contentClassName="alert alert-primary">
       <ModalHeader toggle={props.toggleModal}>Create new Poll</ModalHeader>
@@ -124,12 +151,15 @@ const CreatePollModal = (props: CreatePollModalProps) => {
 
           <div className="mt-2">
             <PollQuestionBare
+              toggleQuestionEditMode={toggleQuestionEditMode}
+              getQuestionEditMode={getQuestionEditMode}
               onQuestionCreate={onQuestionCreate}
               onQuestionChange={onQuestionChange}
               onQuestionDelete={onQuestionDelete}
               onAnswerChange={onAnswerChange}
               onAnswerDelete={onAnswerDelete}
               onAnswerCreate={onAnswerCreate}
+              onDragEnd={onDragEnd}
               container={questions}
             />
           </div>

@@ -58,6 +58,13 @@ export const putRequest = (url: string, body = {}) =>
     body: JSON.stringify(body)
   }).then(initialResponseHandler)
 
+export const putRequestWithoutHandler = (url: string, body = {}) =>
+  fetch(url, {
+    method: 'PUT',
+    headers: constructRequestHeaders(),
+    body: JSON.stringify(body)
+  })
+
 export const deleteRequest = (url: string) =>
   fetch(url, {
     method: 'DELETE',

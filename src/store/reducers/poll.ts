@@ -5,7 +5,10 @@ import { PollState, PollTemplateItemType } from '../types'
 import _ from 'lodash'
 
 const initialState: PollState = {
-  polls: [],
+  polls: {
+    content: [],
+    settings: {}
+  },
   // Poll fetching
   pollsLoading: false,
   pollsLoadingFailed: false,
@@ -35,10 +38,18 @@ export const pollReducer = createReducer<PollState, Action>(
 
     [ActionTypes.POLL.GET_POLLS_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
-      polls: action.payload.reduce(
-        (acc: Record<number, PollTemplateItemType>, poll: PollTemplateItemType) => ({ ...acc, [poll.id]: poll }),
-        {}
-      ),
+      polls: {
+        content: action.payload.content.reduce(
+          (acc: Record<number, PollTemplateItemType>, poll: PollTemplateItemType) => ({ ...acc, [poll.id]: poll }),
+          {}
+        ),
+        settings: {
+          totalPages: action.payload.totalPages,
+          totalElements: action.payload.totalElements,
+          size: action.payload.size,
+          number: action.payload.number
+        }
+      },
       pollsLoading: false,
       pollsLoadingfailed: false
     }),
@@ -57,7 +68,7 @@ export const pollReducer = createReducer<PollState, Action>(
 
     [ActionTypes.POLL.CREATE_POLL_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
-      polls: { ...state.polls, [action.payload.poll.id]: action.payload.poll },
+      polls: { ...state.polls, content: { ...state.polls.content, [action.payload.poll.id]: action.payload.poll } },
       pollCreating: false,
       pollCreatingFailed: true
     }),
@@ -76,7 +87,7 @@ export const pollReducer = createReducer<PollState, Action>(
 
     [ActionTypes.POLL.CREATE_POLL_QUESTIONS_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
-      polls: { ...state.polls, [action.payload.poll.id]: action.payload.poll },
+      polls: { ...state.polls, content: { ...state.polls.content, [action.payload.poll.id]: action.payload.poll } },
       pollQuestionsCreating: false,
       pollQuestionsCreatingFailed: false
     }),
@@ -96,7 +107,7 @@ export const pollReducer = createReducer<PollState, Action>(
 
     [ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
-      polls: { ...state.polls, [action.payload.pid]: action.payload.nextData },
+      polls: { ...state.polls, content: { ...state.polls.content, [action.payload.pid]: action.payload.nextData } },
       pollQuestionsEditing: false,
       pollQuestionsEditingFailed: false
     }),
@@ -118,7 +129,10 @@ export const pollReducer = createReducer<PollState, Action>(
       ...state,
       polls: {
         ...state.polls,
-        [action.payload.pid]: { ...state.polls[action.payload.pid], name: action.payload.name }
+        content: {
+          ...state.polls.content,
+          [action.payload.pid]: { ...state.polls.content[action.payload.pid], name: action.payload.name }
+        }
       },
       pollEditing: false,
       pollEditingFailed: false
@@ -138,7 +152,7 @@ export const pollReducer = createReducer<PollState, Action>(
 
     [ActionTypes.POLL.DELETE_POLL_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
-      polls: _.omit(state.polls, action.payload.pid),
+      polls: { ...state.polls, content: _.omit(state.polls.content, action.payload.pid) },
       pollDeleting: false,
       pollDeletingFailed: false
     }),
