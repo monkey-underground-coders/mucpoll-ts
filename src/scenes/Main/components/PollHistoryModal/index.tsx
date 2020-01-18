@@ -13,7 +13,7 @@ const PollHistoryChartPagination = (props: {
   const { selectQuestion, currentQuestionIndex, questionCount } = props
 
   return (
-    <Pagination aria-label="Page navigation example">
+    <Pagination aria-label="Poll history pagination">
       <PaginationItem>
         <PaginationLink
           previous

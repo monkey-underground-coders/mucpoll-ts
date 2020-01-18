@@ -13,12 +13,12 @@ export const getPoll = (pid: number) => (
   return getRequest(apiRoutes.poll(pid))
 }
 
-export const getPolls = () => (
+export const getPolls = (size: number, page: number) => (
   dispatch: ThunkDispatch<StoreRootState, any, Action>,
   getState: () => StoreRootState
 ) => {
   dispatch({ type: ActionTypes.POLL.GET_POLLS_START })
-  return getRequest(apiRoutes.getPolls)
+  return getRequest(apiRoutes.getPolls(size, page))
     .then((json: any) => {
       dispatch({ type: ActionTypes.POLL.GET_POLLS_SUCCESS, payload: json })
     })

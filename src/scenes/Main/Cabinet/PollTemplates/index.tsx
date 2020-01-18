@@ -7,6 +7,7 @@ import { withRouter, RouteComponentProps } from 'react-router'
 import Loader from '#/components/Loader'
 import EditPollModal from '../../components/EditPollModal'
 import './index.scss'
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 
 interface PollTemplatesProps extends RouteComponentProps {
   polls: Polls
@@ -16,20 +17,25 @@ interface PollTemplatesProps extends RouteComponentProps {
   pollDeletingFailed: boolean
   pollEditing: boolean
   pollEditingFailed: boolean
-  getPolls: () => Promise<any>
+  getPolls: (size: number, page: number) => Promise<any>
   deletePoll: (pid: number) => Promise<any>
 }
 
+const TEMPLATES_SIZE = 10
+
 const PollTemplates = (props: PollTemplatesProps) => {
+  const [currentPage, setCurrentPage] = React.useState<number>(0)
   const [selectedPolls, setSelectedPolls] = React.useState<number[]>([])
   const [EditPollModalData, setEditPollModalData] = React.useState<{
     isOpen: boolean
     pid: number | null
   }>({ isOpen: false, pid: null })
 
+  const getSpecifiedPagePolls = () => props.getPolls(TEMPLATES_SIZE, currentPage)
+
   React.useEffect(() => {
-    props.getPolls()
-  }, [])
+    getSpecifiedPagePolls()
+  }, [currentPage])
 
   const navigateToPoll = (pollId: number) => {
     props.history.push(`/cabinet/poll/${pollId}`)
@@ -71,13 +77,6 @@ const PollTemplates = (props: PollTemplatesProps) => {
         <>
           <div className="templates-list__inner">{renderedPolls}</div>
 
-          <div className="animated-div text-right mt-4" style={{ opacity: selectedPolls.length ? 1 : 0 }}>
-            <button className="btn btn-danger">
-              <i className="fas fa-trash"></i>
-              <span className="ml-2">Delete ({selectedPolls.length})</span>
-            </button>
-          </div>
-
           <EditPollModal
             isOpen={EditPollModalData.isOpen}
             pid={EditPollModalData.pid}
@@ -85,6 +84,44 @@ const PollTemplates = (props: PollTemplatesProps) => {
           />
         </>
       )}
+
+      {props.polls.settings.totalPages !== undefined && (
+        <div className="mt-4 text-right">
+          <Pagination aria-label="Poll templates pagination">
+            <PaginationItem>
+              <PaginationLink
+                previous
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0 || props.pollsLoading}
+              />
+            </PaginationItem>
+            {[...new Array(props.polls.settings.totalPages).keys()].map((page: number) => (
+              <PaginationItem key={page} active={page === currentPage}>
+                <PaginationLink
+                  onClick={() => setCurrentPage(page)}
+                  disabled={page === currentPage || props.pollsLoading}
+                >
+                  {page + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationLink
+                next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={props.polls.settings.totalPages === currentPage + 1 || props.pollsLoading}
+              />
+            </PaginationItem>
+          </Pagination>
+        </div>
+      )}
+
+      <div className="animated-div text-right mt-4" style={{ opacity: selectedPolls.length ? 1 : 0 }}>
+        <button className="btn btn-danger">
+          <i className="fas fa-trash"></i>
+          <span className="ml-2">Delete ({selectedPolls.length})</span>
+        </button>
+      </div>
     </div>
   )
 }
