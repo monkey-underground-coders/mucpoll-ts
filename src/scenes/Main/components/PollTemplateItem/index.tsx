@@ -2,23 +2,24 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { PollTemplateItemType } from '#/store/types'
 import Loader from '#/components/Loader'
+import Checkbox from '#/components/Checkbox'
 
 interface PollTemplateItemProps {
   item: PollTemplateItemType
   pollDeleting: boolean
   pollEditing: boolean
+  selected: boolean
   deletePoll: () => void
   navigateToPoll: () => void
   editPoll: () => void
+  selectPoll: () => void
 }
 
 const PollTemplateItem = (props: PollTemplateItemProps) => {
   return (
     <div className="templates-list__item">
       <div className="templates-list__item__selection">
-        <div className="templates-list__item__selection__select">
-          <i className="far fa-circle"></i>
-        </div>
+        <Checkbox checked={props.selected} toggle={props.selectPoll} />
       </div>
 
       <div className="templates-list__item__naming">

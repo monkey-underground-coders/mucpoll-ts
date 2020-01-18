@@ -21,6 +21,7 @@ interface PollTemplatesProps extends RouteComponentProps {
 }
 
 const PollTemplates = (props: PollTemplatesProps) => {
+  const [selectedPolls, setSelectedPolls] = React.useState<number[]>([])
   const [EditPollModalData, setEditPollModalData] = React.useState<{
     isOpen: boolean
     pid: number | null
@@ -34,6 +35,16 @@ const PollTemplates = (props: PollTemplatesProps) => {
     props.history.push(`/cabinet/poll/${pollId}`)
   }
 
+  const togglePollSelected = (pid: number) => {
+    if (selectedPolls.includes(pid)) {
+      // If poll is already selected, unselect it
+      setSelectedPolls(selectedPolls.filter((s: number) => s !== pid))
+    } else {
+      // Otherwise, add to selected
+      setSelectedPolls([...selectedPolls, pid])
+    }
+  }
+
   const polls = React.useMemo(() => Object.values(props.polls), [props.polls])
 
   const renderedPolls = polls.map((poll: PollTemplateItemType) => (
@@ -45,6 +56,8 @@ const PollTemplates = (props: PollTemplatesProps) => {
       editPoll={() => setEditPollModalData({ isOpen: true, pid: poll.id })}
       pollDeleting={props.pollDeleting}
       pollEditing={props.pollEditing}
+      selected={selectedPolls.includes(poll.id)}
+      selectPoll={() => togglePollSelected(poll.id)}
     />
   ))
 
@@ -57,6 +70,14 @@ const PollTemplates = (props: PollTemplatesProps) => {
       ) : (
         <>
           <div className="templates-list__inner">{renderedPolls}</div>
+
+          <div className="animated-div text-right mt-4" style={{ opacity: selectedPolls.length ? 1 : 0 }}>
+            <button className="btn btn-danger">
+              <i className="fas fa-trash"></i>
+              <span className="ml-2">Delete ({selectedPolls.length})</span>
+            </button>
+          </div>
+
           <EditPollModal
             isOpen={EditPollModalData.isOpen}
             pid={EditPollModalData.pid}

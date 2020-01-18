@@ -20,7 +20,8 @@ const Cabinet = (props: CabinetProps) => {
           <div className="text-subtitle">My voting templates</div>
           <div>
             <button className="btn btn-primary" onClick={toggleModal}>
-              <i className="fas fa-plus"></i> Create
+              <i className="fas fa-plus-circle"></i>
+              <span className="ml-1">New Poll</span>
             </button>
           </div>
         </div>

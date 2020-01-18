@@ -184,3 +184,7 @@ canvas {
 .modal-body canvas {
   max-width: 100% !important;
 }
+
+.animated-div {
+  transition: 0.3s;
+}

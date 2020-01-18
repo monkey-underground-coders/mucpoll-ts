@@ -4,6 +4,7 @@ $voting-border: thin solid #e6e6e687;
 
 .templates-list {
   &__inner {
+    transition: 0.3s;
   }
 
   &__item {

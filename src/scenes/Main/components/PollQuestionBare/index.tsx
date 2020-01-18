@@ -13,16 +13,17 @@ interface PollQuestionBareProps {
 }
 
 const PollQuestionBare = (props: PollQuestionBareProps) => {
+  const getQuestions = React.useMemo(() => Object.keys(props.container), [props.container])
   const renderQuestions = () => {
-    const questions = Object.keys(props.container)
-    if (questions.length) {
-      return questions.map((questionHash: QuestionHash, index: number) => {
+    if (getQuestions.length) {
+      return getQuestions.map((questionHash: QuestionHash, index: number) => {
         const question = props.container[questionHash]
         return (
           <PollQuestion
             key={`q${index}`}
             hash={questionHash}
             question={question}
+            onQuestionCreate={props.onQuestionCreate}
             onQuestionDelete={() => props.onQuestionDelete(questionHash)}
             onQuestionChange={(value: string) => props.onQuestionChange(questionHash, value)}
             onAnswerChange={(answerHash: QuestionAnswerHash, value: string) =>
@@ -44,12 +45,27 @@ const PollQuestionBare = (props: PollQuestionBareProps) => {
         <div>
           <button type="button" className="btn btn-primary" onClick={props.onQuestionCreate}>
             <i className="fas fa-plus"></i>
-            <span className="ml-1">Create</span>
+            <span className="ml-1">Question</span>
           </button>
         </div>
       </div>
 
-      <div className="box__body">{renderQuestions()}</div>
+      <div className="box__body">
+        <div>{renderQuestions()}</div>
+        {!!getQuestions.length && (
+          <div className="mt-4">
+            <div className="text-muted small">
+              <div>Shortcuts:</div>
+              <div>
+                <b>Enter</b>: Create next answer
+              </div>
+              <div>
+                <b>Shift + Enter</b>: Create next question
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

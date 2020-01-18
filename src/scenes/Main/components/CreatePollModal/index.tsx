@@ -131,12 +131,13 @@ const CreatePollModal = (props: CreatePollModalProps) => {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" type="submit">
-            Create
-          </Button>
-          <Button color="secondary" className="ml-2" onClick={props.toggleModal}>
+          <button className="btn btn-secondary" type="button" onClick={props.toggleModal}>
             Cancel
-          </Button>
+          </button>
+
+          <button className="btn btn-primary" type="button">
+            Create
+          </button>
         </ModalFooter>
       </form>
     </Modal>

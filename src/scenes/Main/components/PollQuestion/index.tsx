@@ -1,14 +1,17 @@
 import React from 'react'
+import { QuestionContainerItem, QuestionHash, QuestionAnswerHash } from '#/store/types'
 import _ from 'lodash'
 import './index.scss'
-import { postRequest } from '#/agent'
-import { QuestionContainerItem, QuestionHash, QuestionAnswerHash } from '#/store/types'
 
 interface PollQuestionAnswerProps {
   hash: QuestionAnswerHash
   answer: string
   onDelete: () => void
   onChange: (hash: QuestionAnswerHash, value: string) => void
+  createNextAnswer: () => void
+  createNextQuestion: () => void
+  shouldFocusInputRightAway: boolean
+  setShouldFocusInputRightAway: (arg: boolean) => void
 }
 
 interface PollQuestionProps {
@@ -18,28 +21,56 @@ interface PollQuestionProps {
   onAnswerCreate: () => void
   onAnswerDelete: (answerHash: QuestionAnswerHash) => void
   onAnswerChange: (answerHash: QuestionAnswerHash, value: string) => void
-  onQuestionChange: (value: string) => void
+  onQuestionCreate: () => void
   onQuestionDelete: () => void
+  onQuestionChange: (value: string) => void
 }
 
 const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
+  const _inputRef = React.useRef(null)
   const [editMode, setEditMode] = React.useState<Boolean>(true)
 
-  const toggleEdit = () => {
-    if (props.answer) {
-      setEditMode(!editMode)
+  React.useLayoutEffect(() => {
+    if (props.shouldFocusInputRightAway && _inputRef.current) {
+      (_inputRef.current as any).focus()
+      props.setShouldFocusInputRightAway(false)
     }
+  }, [props.shouldFocusInputRightAway])
+
+  const toggleEdit = () => {
+    !!props.answer && setEditMode(!editMode)
   }
 
-  const removeItem = () => props.onDelete()
+  const changeItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChange(props.hash, e.target.value)
+  }
 
-  const changeItem = (e: React.ChangeEvent<HTMLInputElement>) => props.onChange(props.hash, e.target.value)
+  const onAnswerInputKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      toggleEdit()
+
+      if (event.shiftKey) {
+        props.createNextQuestion()
+      } else if (props.answer) {
+        props.createNextAnswer()
+        props.setShouldFocusInputRightAway(true)
+      }
+    }
+  }
 
   return (
     <div className="question-item__layout__answers__item">
       <div>
         {editMode ? (
-          <input type="text" className="form-control" value={props.answer} onChange={changeItem} placeholder="Answer" />
+          <input
+            type="text"
+            className="form-control"
+            value={props.answer}
+            onChange={changeItem}
+            onKeyPress={onAnswerInputKeyPress}
+            placeholder="Answer"
+            ref={_inputRef}
+          />
         ) : (
           <span>{props.answer}</span>
         )}
@@ -49,7 +80,7 @@ const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
         <button type="button" className="btn btn-list" onClick={toggleEdit}>
           {editMode ? <i className="fas fa-check"></i> : <i className="fas fa-pen"></i>}
         </button>
-        <button type="button" className="btn btn-list ml-2" onClick={removeItem}>
+        <button type="button" className="btn btn-list ml-2" onClick={props.onDelete}>
           <i className="fas fa-times"></i>
         </button>
       </div>
@@ -58,12 +89,19 @@ const PollQuestionAnswer = (props: PollQuestionAnswerProps) => {
 }
 
 const PollQuestion = (props: PollQuestionProps) => {
-  const { title, answers } = props.question
+  const [shouldFocusNextAnswerInputRightAway, setShouldFocusNextAnswerInputRightAway] = React.useState<boolean>(false)
   const [editMode, setEditMode] = React.useState<Boolean>(true)
+  const { title, answers } = props.question
 
   const toggleEdit = () => {
-    if (title) {
-      setEditMode(!editMode)
+    !!title && setEditMode(!editMode)
+  }
+
+  const onQuestionInputKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && title) {
+      toggleEdit()
+      props.onAnswerCreate()
+      setShouldFocusNextAnswerInputRightAway(true)
     }
   }
 
@@ -78,7 +116,11 @@ const PollQuestion = (props: PollQuestionProps) => {
             hash={hash}
             onChange={props.onAnswerChange}
             onDelete={() => props.onAnswerDelete(hash)}
+            createNextAnswer={props.onAnswerCreate}
+            createNextQuestion={props.onQuestionCreate}
             answer={answer}
+            shouldFocusInputRightAway={shouldFocusNextAnswerInputRightAway}
+            setShouldFocusInputRightAway={setShouldFocusNextAnswerInputRightAway}
           />
         </div>
       </div>
@@ -92,6 +134,8 @@ const PollQuestion = (props: PollQuestionProps) => {
       className="form-control w-100"
       value={title}
       onChange={e => props.onQuestionChange(e.target.value)}
+      onKeyPress={onQuestionInputKeyPress}
+      autoFocus
       required
     />
   ) : (
@@ -111,7 +155,7 @@ const PollQuestion = (props: PollQuestionProps) => {
               onClick={props.onAnswerCreate}
             >
               <i className="fas fa-plus"></i>
-              <span className="ml-1">Add answer</span>
+              <span className="ml-1">Answer</span>
             </button>
 
             {editMode ? (
