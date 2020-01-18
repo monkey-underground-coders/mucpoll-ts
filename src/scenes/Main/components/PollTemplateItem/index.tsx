@@ -26,8 +26,12 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
         <div className="templates-list__item__general">
           <div className="templates-list__item__general__name">{props.item.name}</div>
           <div className="templates-list__item__general__info">
-            {/* <div className="templates-list__item__general__info__questions"></div>
-
+            <div className="templates-list__item__general__info__questions">
+              <Link to={`/cabinet/pollHistory/${props.item.id}`}>
+                <i className="fas fa-history"></i> Get history
+              </Link>
+            </div>
+            {/*
             <div className="templates-list__item__general__info__votes">
               <i className="fas fa-eye"></i>
               <span className="ml-2">63</span>

@@ -35,6 +35,28 @@ export interface PollTemplateItemType {
   tags: Array<any>
 }
 
+export type PollHistoryRecordedQuestions = Array<{
+  qid: number
+  question: string
+  recordedData: Array<{ aid: number; answer: string; count: number }>
+}>
+
+export type PollHistoryItem = {
+  sid: string
+  pollInfo: {
+    id: number
+    name: string
+    questions: any[]
+    creator: any
+    launchedCount: number
+    tags: any[]
+  }
+  pid: number
+  recordedQuestions: PollHistoryRecordedQuestions
+  startedAt: string
+  recordedAt: string
+}
+
 export interface UserState {
   token: string | null
 }

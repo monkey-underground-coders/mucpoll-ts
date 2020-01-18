@@ -2,6 +2,7 @@ import React from 'react'
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import { AnswerOption, AnswerSignature } from '#/store/types'
+import { generateChartBarColor } from '#/utils/functions'
 
 interface VoteStatsProps {
   currentIndex: number
@@ -112,7 +113,7 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="answers" fill="#8884d8" />
+            <Bar dataKey="answers" fill={generateChartBarColor(this.props.currentIndex)} />
           </BarChart>
         </ResponsiveContainer>
 

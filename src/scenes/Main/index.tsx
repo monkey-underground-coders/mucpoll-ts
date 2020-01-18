@@ -9,6 +9,7 @@ import userSelectors from '#/store/selectors/user'
 import Poller from './Poller'
 import './index.scss'
 import { wsRoutes } from '#/agent/api'
+import PollHistory from './PollHistory'
 
 interface MainSceneProps extends RouteComponentProps {
   authenticated: boolean | null
@@ -46,6 +47,15 @@ const MainScene = (props: MainSceneProps) => {
               render={props => (
                 <Page title={`Poll #${props.match.params.id}`}>
                   <Poller {...props} />
+                </Page>
+              )}
+            />
+
+            <Route
+              path={`${match.url}/pollHistory/:id`}
+              render={props => (
+                <Page title={`History of #${props.match.params.id}`}>
+                  <PollHistory {...props} />
                 </Page>
               )}
             />

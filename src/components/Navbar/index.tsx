@@ -12,11 +12,6 @@ const NAVBAR_LINKS = [
     icon: 'fas fa-th-list'
   },
   {
-    url: '/cabinet/history',
-    title: 'History',
-    icon: 'fas fa-history'
-  },
-  {
     url: '/cabinet/settings',
     title: 'Settings',
     icon: 'fas fa-cogs'

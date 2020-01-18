@@ -24,3 +24,18 @@ export const copyToClipBoardEvent = (evt: React.MouseEvent<HTMLButtonElement>, v
   document.execCommand('copy')
   textField.remove()
 }
+
+export const parseDate = (date: string) => {
+  if (!date) return date
+  return new Date(date).toLocaleDateString('en-GB', {
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  })
+}
+
+export const generateChartBarColor = (index: number) => {
+  const chartBarColors = ['#8884d8', '#82ca9d', '#b45cc3']
+  return chartBarColors[index % chartBarColors.length]
+}
