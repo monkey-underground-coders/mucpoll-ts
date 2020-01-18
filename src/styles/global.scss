@@ -188,3 +188,59 @@ canvas {
 .animated-div {
   transition: 0.3s;
 }
+
+.mask-leave,
+.mask-top-leave,
+.mask1-leave {
+  opacity: 0.8;
+}
+
+.mask-leave.mask-leave-active,
+.mask-top-leave.mask-top-leave-active,
+.mask1-leave.mask1-leave-active {
+  opacity: 0;
+  transition: all 300ms ease-in;
+}
+
+.mask-top-appear {
+  transform: translateY(-75%);
+  opacity: 0;
+  transition: transform 0s ease-in;
+
+  &.mask-top-appear-active {
+    opacity: 1;
+    transition: opacity 0.3s ease-in, transform 0.3s ease-out;
+    transform: translateY(0);
+  }
+}
+
+.mask-appear {
+  // transform: translateY(-10%);
+  transform: translateX(-75%);
+  opacity: 0;
+  transition: transform 0s ease-in;
+}
+
+.mask-appear.mask-appear-active {
+  opacity: 1;
+  transition: opacity 0.3s ease-in, transform 0.3s ease-out;
+  transform: translateX(0);
+}
+
+// another direction
+.mask1-appear table {
+  overflow: hidden;
+}
+
+.mask1-appear {
+  // transform: translateY(-10%);
+  transform: translateX(75%);
+  opacity: 0;
+  transition: transform 0s ease-in;
+
+  &.mask1-appear-active {
+    opacity: 1;
+    transition: opacity 0.3s ease-in, transform 0.3s ease-out;
+    transform: translateX(0);
+  }
+}

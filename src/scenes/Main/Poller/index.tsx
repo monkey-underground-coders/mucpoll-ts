@@ -10,6 +10,7 @@ import { Question, AnswerOption } from '#/store/types'
 import { UncontrolledPopover, PopoverBody } from 'reactstrap'
 import Loader from '#/components/Loader'
 import SharePollModal from '../components/SharePollModal'
+import AnimatedPageTransition from '#/components/AnimatedPageTransition'
 
 interface PollerProps extends RouteComponentProps<{ id: string | undefined }> {}
 
@@ -198,22 +199,24 @@ class Poller extends React.Component<PollerProps, PollerState> {
     const currentIndex: number = currentQuestion.index
     const currentAnswers: Array<{ aid: number; count: number }> = voteInfo.answers
     return (
-      <div>
-        {this.getWebSocketWrapper()}
-        <VoteStats
-          question={questionTitle}
-          answers={answerOptions}
-          selectQuestion={(index: number) => this.changeQuestion(indexToQID[index].toString())}
-          currentIndex={currentIndex}
-          questionCount={voteInfo.pollInfo.questions.length}
-          closeVote={this.closeVote}
-          currentAnswers={currentAnswers}
-          openShareModal={() => this.toggleSharePollModalOpen()}
-        />
-        <SharePollModal isOpen={this.state.sharePollModalOpen} toggle={() => this.toggleSharePollModalOpen()}>
-          {this.getLinks()}
-        </SharePollModal>
-      </div>
+      <AnimatedPageTransition>
+        <div>
+          {this.getWebSocketWrapper()}
+          <VoteStats
+            question={questionTitle}
+            answers={answerOptions}
+            selectQuestion={(index: number) => this.changeQuestion(indexToQID[index].toString())}
+            currentIndex={currentIndex}
+            questionCount={voteInfo.pollInfo.questions.length}
+            closeVote={this.closeVote}
+            currentAnswers={currentAnswers}
+            openShareModal={() => this.toggleSharePollModalOpen()}
+          />
+          <SharePollModal isOpen={this.state.sharePollModalOpen} toggle={() => this.toggleSharePollModalOpen()}>
+            {this.getLinks()}
+          </SharePollModal>
+        </div>
+      </AnimatedPageTransition>
     )
   }
 
@@ -221,55 +224,62 @@ class Poller extends React.Component<PollerProps, PollerState> {
     const { voteId, sid } = this.state
     const link = `${selfUrl}/guest/voter/${voteId}/${sid}`
     return (
-      <>
-        <QRCode
-          value={link}
-          size={Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight) * 0.8}
-        />
-        <div className="my-2">
-          <div>
-            Share link:
-            <button
-              id="copyToClipboardLink"
-              className="btn btn-text-link btn-text-link__big"
-              onClick={e => copyToClipBoardEvent(e, link)}
-            >
-              <i className="far fa-copy"></i> {link}
-            </button>
-          </div>
+      <AnimatedPageTransition>
+        <>
+          <QRCode
+            value={link}
+            size={Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight) * 0.8}
+          />
+          <div className="my-2">
+            <div>
+              Share link:
+              <button
+                id="copyToClipboardLink"
+                className="btn btn-text-link btn-text-link__big"
+                onClick={e => copyToClipBoardEvent(e, link)}
+              >
+                <i className="far fa-copy"></i> {link}
+              </button>
+            </div>
 
-          <UncontrolledPopover trigger="legacy" placement="top" target="#copyToClipboardLink">
-            <PopoverBody>Copied to clipboard!</PopoverBody>
-          </UncontrolledPopover>
-        </div>
-      </>
+            <UncontrolledPopover trigger="legacy" placement="top" target="#copyToClipboardLink">
+              <PopoverBody>Copied to clipboard!</PopoverBody>
+            </UncontrolledPopover>
+          </div>
+        </>
+      </AnimatedPageTransition>
     )
   }
 
   renderLink = () => {
     return (
-      <div className="text-center">
-        {this.getWebSocketWrapper()}
-        {this.getLinks()}
+      <AnimatedPageTransition>
+        <div className="text-center">
+          {this.getWebSocketWrapper()}
+          {this.getLinks()}
 
-        <button className="btn btn-primary" onClick={this.goToOnline}>
-          Start!
-        </button>
-      </div>
+          <button className="btn btn-primary" onClick={this.goToOnline}>
+            Start!
+          </button>
+        </div>
+      </AnimatedPageTransition>
     )
   }
 
   renderLoading = () => {
     return (
-      <div>
-        {this.getWebSocketWrapper()}
-        <Loader />
-      </div>
+      <AnimatedPageTransition>
+        <div>
+          {this.getWebSocketWrapper()}
+          <Loader />
+        </div>
+      </AnimatedPageTransition>
     )
   }
 
   render() {
     const { exchangeStatus } = this.state
+
     if (exchangeStatus === ExchangeStatus.CLOSED) {
       return this.renderClosed()
     } else if (exchangeStatus === ExchangeStatus.ONLINE) {

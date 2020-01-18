@@ -30,6 +30,6 @@ export const wsRoutes = {
   poll: getWsUrl(`poll`)
 }
 
-export const selfUrl = 'http://localhost:3000'
+export const selfUrl = window.location.origin
 
 export default apiRoutes

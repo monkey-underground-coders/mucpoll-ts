@@ -9,6 +9,7 @@ import _ from 'lodash'
 import './index.scss'
 import PollHistoryModal from '../components/PollHistoryModal'
 import { PollHistoryItem, PollHistoryRecordedQuestions } from '#/store/types'
+import AnimatedPageTransition from '#/components/AnimatedPageTransition'
 
 interface PollHistoryProps extends RouteComponentProps<{ id: string | undefined }> {}
 
@@ -93,7 +94,7 @@ const PollHistory = (props: PollHistoryProps) => {
   )
 
   return (
-    <>
+    <AnimatedPageTransition>
       <div className="box">
         {!pollHistoryLoading && !_.isEmpty(pollHistoryData) && (
           <div className="box__header">
@@ -132,7 +133,7 @@ const PollHistory = (props: PollHistoryProps) => {
           />
         </div>
       </div>
-    </>
+    </AnimatedPageTransition>
   )
 }
 
