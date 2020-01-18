@@ -13,6 +13,7 @@ const Application = (props: ApplicationProps) => {
   const applicationRoutes = (
     <Switch>
       <Route path="/" component={AuthScene} exact={true} />
+      <Route path="/auth" component={AuthScene} />
       <Route path="/cabinet" component={MainScene} />
       <Route path="/guest" component={GuestScene} />
     </Switch>

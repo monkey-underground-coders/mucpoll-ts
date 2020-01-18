@@ -6,12 +6,14 @@ import { authorize } from '#/store/actions/user'
 import './index.scss'
 import { string } from 'prop-types'
 import { generatebase64 } from '#/utils/functions'
+import Loader from '#/components/Loader'
 
 interface SignInProps extends RouteComponentProps {
   authorize: (token: string) => Promise<any>
 }
 
 const SignIn = (props: SignInProps) => {
+  const [fetching, setFetching] = React.useState<boolean>(false)
   const [formState, setFormState] = React.useState<{ username: string; password: string }>({
     username: '',
     password: ''
@@ -24,23 +26,27 @@ const SignIn = (props: SignInProps) => {
   const handleSignIn = (event: FormEvent) => {
     event.preventDefault()
     const { username, password } = formState
-    const basicAuthToken = generatebase64([username, password])
-    const headers = {
-      Authorization: `Basic ${basicAuthToken}`,
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-    fetch(apiRoutes.authorize, { headers }).then((response: Response) => {
-      if (response.ok) {
-        props.authorize(basicAuthToken).then(() => {
-          window.localStorage.setItem('token', JSON.stringify(basicAuthToken))
-          window.localStorage.setItem('username', JSON.stringify(username))
-          window.localStorage.setItem('password', JSON.stringify(password))
-        })
-      } else if (response.status === 401) {
-        // TODO: Handle erroring
-        alert('invalid data')
+    if (username && password && !fetching) {
+      setFetching(true)
+      const basicAuthToken = generatebase64([username, password])
+      const headers = {
+        Authorization: `Basic ${basicAuthToken}`,
+        'X-Requested-With': 'XMLHttpRequest'
       }
-    })
+      fetch(apiRoutes.authorize, { headers }).then((response: Response) => {
+        if (response.ok) {
+          props.authorize(basicAuthToken).then(() => {
+            window.localStorage.setItem('token', JSON.stringify(basicAuthToken))
+            window.localStorage.setItem('username', JSON.stringify(username))
+            window.localStorage.setItem('password', JSON.stringify(password))
+          })
+        } else if (response.status === 401) {
+          // TODO: Handle erroring
+          alert('invalid data')
+        }
+        setFetching(false)
+      })
+    }
   }
 
   return (
@@ -76,14 +82,14 @@ const SignIn = (props: SignInProps) => {
           </div>
 
           <div className="authorization-card__section__form__button mt-3">
-            <button type="submit" className="btn btn-success btn-rounded">
-              Login
+            <button type="submit" className="btn btn-success btn-rounded" disabled={fetching}>
+              {fetching ? <Loader small={true} /> : 'Login'}
             </button>
-            <div className="authorization-card__section__form__button__link">
+            {/* <div className="authorization-card__section__form__button__link">
               <Link to="/auth/restore" className="btn-text-link">
                 Forgot Password?
               </Link>
-            </div>
+            </div> */}
           </div>
 
           <div className="authorization-card__section__form__signup mt-5">

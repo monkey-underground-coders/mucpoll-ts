@@ -37,7 +37,6 @@ const AuthScene = (props: AuthSceneProps) => {
 
           <Route
             path={`${match.url}/signup`}
-            exact={true}
             render={props => (
               <Page title="Register">
                 <SignUp {...props} />
