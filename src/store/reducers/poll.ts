@@ -58,7 +58,8 @@ export const pollReducer = createReducer<PollState, Action>(
     [ActionTypes.POLL.CREATE_POLL_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
       polls: { ...state.polls, [action.payload.poll.id]: action.payload.poll },
-      pollCreating: false
+      pollCreating: false,
+      pollCreatingFailed: true
     }),
 
     [ActionTypes.POLL.CREATE_POLL_FAIL]: (state: PollState, action: any) => ({

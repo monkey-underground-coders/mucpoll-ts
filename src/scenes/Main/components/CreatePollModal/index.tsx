@@ -8,13 +8,15 @@ import {
   QuestionHash,
   QuestionAnswerHash,
   QuestionContainerItem,
-  QuestionsPayload
+  QuestionsPayload,
+  StoreRootState
 } from '#/store/types'
 import _ from 'lodash'
 
 interface CreatePollModalProps {
   isOpen: boolean
   toggleModal: any
+  pollCreating: boolean
   createPoll: (name: string, questions: QuestionsPayload) => Promise<any>
 }
 
@@ -28,6 +30,8 @@ const CreatePollModal = (props: CreatePollModalProps) => {
       const questions = constructQuestionsToRequest()
       props.createPoll(pollTitle, questions).then((json: any) => {
         props.toggleModal()
+        setPollTitle('')
+        setQuestions({})
       })
     }
   }
@@ -135,7 +139,7 @@ const CreatePollModal = (props: CreatePollModalProps) => {
             Cancel
           </button>
 
-          <button className="btn btn-primary" type="button">
+          <button className="btn btn-primary" type="button" onClick={createPoll} disabled={props.pollCreating}>
             Create
           </button>
         </ModalFooter>
@@ -144,4 +148,10 @@ const CreatePollModal = (props: CreatePollModalProps) => {
   )
 }
 
-export default connect(null, { createPoll })(CreatePollModal)
+export default connect(
+  (store: StoreRootState) => ({
+    pollCreating: store.poll.pollCreating,
+    pollCreatingFailed: store.poll.pollCreatingFailed
+  }),
+  { createPoll }
+)(CreatePollModal)
