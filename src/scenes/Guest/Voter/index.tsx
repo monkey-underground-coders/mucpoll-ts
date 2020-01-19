@@ -4,10 +4,12 @@ import Websocket from 'react-websocket'
 import { wsRoutes } from '#/agent/api'
 import VoteBoard from '../components/VoteBoard'
 import { RouteComponentProps } from 'react-router'
-import { Question, AnswerOption } from '#/store/types'
+import { AnswerOption, Question } from '#/store/types'
 import Loader from '#/components/Loader'
+import { getCurrentSeconds } from '#/utils/functions'
 
-interface VoterProps extends RouteComponentProps<{ voteId: string; voteUUID: string }> {}
+interface VoterProps extends RouteComponentProps<{ voteId: string; voteUUID: string }> {
+}
 
 interface VoterState {
   exchangeStatus: number
@@ -45,6 +47,7 @@ class Voter extends React.Component<VoterProps, VoterState> {
       this.stateOnline(data)
     }
   }
+  lastWriteHeartbeat = getCurrentSeconds()
 
   constructor(props: VoterProps) {
     super(props)
@@ -72,8 +75,8 @@ class Voter extends React.Component<VoterProps, VoterState> {
         exchangeStatus: !live
           ? ExchangeStatusEnum.CLOSED
           : decoded.started
-          ? ExchangeStatusEnum.ONLINE
-          : ExchangeStatusEnum.AWAITING_START,
+            ? ExchangeStatusEnum.ONLINE
+            : ExchangeStatusEnum.AWAITING_START,
         voteInfo: decoded
       },
       () => {
@@ -90,8 +93,8 @@ class Voter extends React.Component<VoterProps, VoterState> {
         exchangeStatus: !live
           ? ExchangeStatusEnum.CLOSED
           : decoded.started
-          ? ExchangeStatusEnum.ONLINE
-          : prevState.exchangeStatus,
+            ? ExchangeStatusEnum.ONLINE
+            : prevState.exchangeStatus,
         voteInfo: decoded
       }),
       () => {
@@ -128,7 +131,17 @@ class Voter extends React.Component<VoterProps, VoterState> {
     const { exchangeStatus } = this.state
     if (data === '\n') {
       this.sendMessage('\n')
-    } else if (this.transitions.hasOwnProperty(exchangeStatus)) {
+      return
+    } else if ((
+        this.state.exchangeStatus === ExchangeStatusEnum.ONLINE ||
+        this.state.exchangeStatus === ExchangeStatusEnum.AWAITING_START
+      ) &&
+      getCurrentSeconds() - this.lastWriteHeartbeat > stomp.defaultWriteHeartbeatInterval) {
+      this.sendMessage('\n')
+      this.lastWriteHeartbeat = getCurrentSeconds()
+    }
+
+    if (this.transitions.hasOwnProperty(exchangeStatus)) {
       this.transitions[exchangeStatus](data)
     }
   }
@@ -202,7 +215,7 @@ class Voter extends React.Component<VoterProps, VoterState> {
     return (
       <>
         {this.getWebSocketWrapper()}
-        <Loader />
+        <Loader/>
       </>
     )
   }
