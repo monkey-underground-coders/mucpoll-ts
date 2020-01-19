@@ -1,5 +1,5 @@
 import React from 'react'
-import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import { AnswerOption, AnswerSignature } from '#/store/types'
 import { generateChartBarColor } from '#/utils/functions'
@@ -105,15 +105,19 @@ class VoteStats extends React.Component<VoteStatsProps, VoteStatsState> {
         </div>
 
         <br />
-        <p className="text-center">{this.props.question}</p>
+        <h5 className="text-center">{this.props.question}</h5>
 
         <ResponsiveContainer width={'100%'} height={chartHeight}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
+          <BarChart data={chartData} layout="vertical">
+            <CartesianGrid strokeDasharray="2 2" />
+            <XAxis type="number" allowDecimals={true} />
+            <YAxis type="category" dataKey="name" hide />
+            <Tooltip cursor={{ fill: 'rgba(0,0,0,0.05)' }} />
             <Bar dataKey="answers" fill={generateChartBarColor(this.props.currentIndex)} />
+
+            {chartData.map((chartItem: { name: string; answers: number }) => (
+              <ReferenceLine y={chartItem.name} label={chartItem.name} stroke="transparent" isFront={true} />
+            ))}
           </BarChart>
         </ResponsiveContainer>
 
