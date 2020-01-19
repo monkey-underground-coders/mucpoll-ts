@@ -8,8 +8,7 @@ import {
   QuestionContainer,
   QuestionHash,
   QuestionAnswerHash,
-  AnswerOption,
-  QuestionContainerItem
+  AnswerOption
 } from '#/store/types'
 import _ from 'lodash'
 import PollQuestionBare from '../PollQuestionBare'
@@ -43,9 +42,11 @@ const EditPollModal = (props: EditPollModalProps) => {
   })
   const [newlyCreatedQuestions, setNewlyCreatedQuestions] = React.useState<QuestionContainer>({})
 
+  const { pid, polls } = props
+
   React.useEffect(() => {
-    if (props.pid) {
-      const currentPoll = _.get(props!.polls!.content, props.pid, null)
+    if (pid) {
+      const currentPoll = _.get(polls!.content, pid, null)
       if (currentPoll) {
         const constructQuestionsContainer = currentPoll.questions.reduce(
           (questionsAcc, question: Question) => ({
@@ -70,7 +71,7 @@ const EditPollModal = (props: EditPollModalProps) => {
         setNewlyCreatedQuestions(constructQuestionsContainer)
       }
     }
-  }, [props.pid])
+  }, [pid, polls])
 
   const onQuestionCreate = () => {
     const hash = `QuestionHash_${new Date().getTime()}`
@@ -152,7 +153,6 @@ const EditPollModal = (props: EditPollModalProps) => {
 
     const updatedQuestions = updatedQuestionsKeys.reduce(
       (updatedQuestionsAcc: Array<{ title: string; answers: string[] }>, questionKey: number) => {
-        const _originalQuestion = pollData.questions?.find((q: Question) => q.id === questionKey)
         const _nextQuestion = newlyCreatedQuestions[questionKey]
         const _answers = Object.values(_nextQuestion.answers).filter(e => e)
 

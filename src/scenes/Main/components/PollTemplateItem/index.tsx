@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { PollTemplateItemType } from '#/store/types'
-import Loader from '#/components/Loader'
 import Checkbox from '#/components/Checkbox'
 import { parseDate } from '#/utils/functions'
 
@@ -32,11 +31,6 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
                 <i className="fas fa-history"></i> Get history
               </Link>
             </div>
-            {/*
-            <div className="templates-list__item__general__info__votes">
-              <i className="fas fa-eye"></i>
-              <span className="ml-2">63</span>
-            </div> */}
           </div>
         </div>
 

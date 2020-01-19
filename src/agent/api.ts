@@ -19,12 +19,13 @@ const getWsUrl = (route: string) => {
 export const apiRoutes = {
   authorize: getUrl(`user/cookies`),
   register: getUrl(`user/reg`),
-  getPolls: (size: number = 10, page: number = 0) => getUrl(`poll/polls?size=${size}&page=${page}`),
+  getPolls: (size: number = 10, page: number = 0) =>
+    getUrl(`poll/polls?size=${size}&page=${page}&sort=createdAt%2Cdesc`),
   createPoll: getUrl(`poll/create`),
   poll: (pid: number) => getUrl(`poll/${pid}`),
   pollQuestion: (pid: number) => getUrl(`poll/${pid}/question`),
   pollHistory: (pid: number, size: number = 10, page: number = 0) =>
-    getUrl(`poll/${pid}/history?size=${size}&page=${page}`)
+    getUrl(`poll/${pid}/history?size=${size}&page=${page}&sort=startedAt%2Cdesc`)
 }
 
 export const wsRoutes = {

@@ -3,7 +3,6 @@ import { Modal, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLi
 import { ResponsiveContainer, BarChart, Tooltip, CartesianGrid, XAxis, YAxis, Bar } from 'recharts'
 import { generateChartBarColor } from '#/utils/functions'
 import { PollHistoryRecordedQuestions } from '#/store/types'
-import _ from 'lodash'
 
 const PollHistoryChartPagination = (props: {
   selectQuestion: (index: number) => void

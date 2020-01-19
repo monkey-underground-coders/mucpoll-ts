@@ -1,35 +1,28 @@
-import { StoreRootState, QuestionsPayload, PollTemplateItemType } from '../types'
+import { StoreRootState, QuestionsPayload } from '../types'
 import apiRoutes from '#/agent/api'
 import ActionTypes from '.'
-import { Dispatch, Action } from 'redux'
-import { getRequest, postRequest, putRequest, deleteRequest, putRequestWithoutHandler } from '#/agent'
+import { Action } from 'redux'
+import { getRequest, postRequest, deleteRequest, putRequestWithoutHandler } from '#/agent'
 import _ from 'lodash'
 import { ThunkDispatch } from 'redux-thunk'
 
-export const getPoll = (pid: number) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
-) => {
+export const getPoll = (pid: number) => () => {
   return getRequest(apiRoutes.poll(pid))
 }
 
-export const getPolls = (size: number, page: number) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
-) => {
+export const getPolls = (size: number, page: number) => (dispatch: ThunkDispatch<StoreRootState, any, Action>) => {
   dispatch({ type: ActionTypes.POLL.GET_POLLS_START })
   return getRequest(apiRoutes.getPolls(size, page))
     .then((json: any) => {
       dispatch({ type: ActionTypes.POLL.GET_POLLS_SUCCESS, payload: json })
     })
-    .catch(err => {
+    .catch(() => {
       dispatch({ type: ActionTypes.POLL.GET_POLLS_FAIL })
     })
 }
 
 export const createQuestionsForPoll = (pid: number, questions: QuestionsPayload) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
+  dispatch: ThunkDispatch<StoreRootState, any, Action>
 ) => {
   dispatch({ type: ActionTypes.POLL.CREATE_POLL_QUESTIONS_START })
   return postRequest(apiRoutes.pollQuestion(pid), questions)
@@ -44,8 +37,7 @@ export const createQuestionsForPoll = (pid: number, questions: QuestionsPayload)
 }
 
 export const createPoll = (name: string, questions: QuestionsPayload = []) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
+  dispatch: ThunkDispatch<StoreRootState, any, Action>
 ) => {
   dispatch({ type: ActionTypes.POLL.CREATE_POLL_START })
   return postRequest(apiRoutes.createPoll, { name })
@@ -70,10 +62,7 @@ export const createPoll = (name: string, questions: QuestionsPayload = []) => (
     })
 }
 
-export const deletePoll = (pid: number) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
-) => {
+export const deletePoll = (pid: number) => (dispatch: ThunkDispatch<StoreRootState, any, Action>) => {
   dispatch({ type: ActionTypes.POLL.DELETE_POLL_START })
   return deleteRequest(apiRoutes.poll(pid))
     .then(() => {
@@ -85,10 +74,7 @@ export const deletePoll = (pid: number) => (
     })
 }
 
-export const deletePolls = (pids: number[]) => (
-  dispatch: ThunkDispatch<StoreRootState, any, Action>,
-  getState: () => StoreRootState
-) => {
+export const deletePolls = (pids: number[]) => (dispatch: ThunkDispatch<StoreRootState, any, Action>) => {
   dispatch({ type: ActionTypes.POLL.DELETE_POLLS_START })
   return Promise.all(pids.map((pid: number) => deleteRequest(apiRoutes.poll(pid))))
     .then(() => {
@@ -108,10 +94,10 @@ export const editPoll = (
   name: string,
   list: Array<{ title: string; answers: string[] }>,
   tags: string[]
-) => (dispatch: ThunkDispatch<StoreRootState, any, Action>, getState: () => StoreRootState) => {
+) => (dispatch: ThunkDispatch<StoreRootState, any, Action>) => {
   dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_START })
   return putRequestWithoutHandler(apiRoutes.poll(pid as number), { name, list, tags })
-    .then(data => {
+    .then(() => {
       dispatch(getPoll(pid)).then(data => {
         dispatch({ type: ActionTypes.POLL.EDIT_POLL_QUESTIONS_SUCCESS, payload: { pid, nextData: data } })
       })

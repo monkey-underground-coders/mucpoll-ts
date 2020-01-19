@@ -16,12 +16,13 @@ interface PollQuestionBareProps {
 }
 
 const PollQuestionBare = (props: PollQuestionBareProps) => {
-  const questionsList = React.useMemo(() => Object.keys(props.container), [props.container])
+  const { container } = props
+  const questionsList = React.useMemo(() => Object.keys(container), [container])
   const renderedQuestions = React.useMemo(() => {
     if (questionsList.length) {
       return questionsList.map((questionHash: QuestionHash, index: number) => {
         const questionClassName = ['question-item', index === 0 ? 'question-item__first' : ''].join(' ')
-        const question = props.container[questionHash]
+        const question = container[questionHash]
         return (
           <Draggable draggableId={questionHash as string} index={index} key={questionHash}>
             {provided => (
@@ -52,7 +53,17 @@ const PollQuestionBare = (props: PollQuestionBareProps) => {
       })
     }
     return 'No questions created'
-  }, [questionsList])
+  }, [
+    questionsList,
+    container,
+    props.onQuestionChange,
+    props.onQuestionCreate,
+    props.onQuestionDelete,
+    props.onAnswerChange,
+    props.onAnswerCreate,
+    props.onAnswerDelete,
+    props.toggleQuestionEditMode
+  ])
 
   return (
     <div className="box box-bordered mt-2">

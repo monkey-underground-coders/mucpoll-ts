@@ -3,6 +3,9 @@ export interface Action {
 }
 
 export type Polls = {
+  meta: {
+    sortingOrder: number[]
+  }
   content: Pick<PollTemplateItemType[], number>
   settings: {
     totalPages?: number

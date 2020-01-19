@@ -6,6 +6,9 @@ import _ from 'lodash'
 
 const initialState: PollState = {
   polls: {
+    meta: {
+      sortingOrder: []
+    },
     content: [],
     settings: {}
   },
@@ -42,6 +45,7 @@ export const pollReducer = createReducer<PollState, Action>(
     [ActionTypes.POLL.GET_POLLS_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
       polls: {
+        meta: { sortingOrder: action.payload.content.map((poll: PollTemplateItemType) => poll.id) },
         content: action.payload.content.reduce(
           (acc: Record<number, PollTemplateItemType>, poll: PollTemplateItemType) => ({ ...acc, [poll.id]: poll }),
           {}
@@ -71,7 +75,13 @@ export const pollReducer = createReducer<PollState, Action>(
 
     [ActionTypes.POLL.CREATE_POLL_SUCCESS]: (state: PollState, action: any) => ({
       ...state,
-      polls: { ...state.polls, content: { ...state.polls.content, [action.payload.poll.id]: action.payload.poll } },
+      polls: {
+        ...state.polls,
+        meta: {
+          sortingOrder: [action.payload.poll.id, ...state.polls.meta.sortingOrder]
+        },
+        content: { ...state.polls.content, [action.payload.poll.id]: action.payload.poll }
+      },
       pollCreating: false,
       pollCreatingFailed: true
     }),

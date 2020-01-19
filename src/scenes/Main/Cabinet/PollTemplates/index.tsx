@@ -7,6 +7,7 @@ import { withRouter, RouteComponentProps } from 'react-router'
 import Loader from '#/components/Loader'
 import EditPollModal from '../../components/EditPollModal'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
+import _ from 'lodash'
 import './index.scss'
 
 interface PollTemplatesProps extends RouteComponentProps {
@@ -34,11 +35,11 @@ const PollTemplates = (props: PollTemplatesProps) => {
     pid: number | null
   }>({ isOpen: false, pid: null })
 
-  const getSpecifiedPagePolls = () => props.getPolls(TEMPLATES_SIZE, currentPage)
+  const { getPolls } = props
 
   React.useEffect(() => {
-    getSpecifiedPagePolls()
-  }, [currentPage])
+    getPolls(TEMPLATES_SIZE, currentPage)
+  }, [currentPage, getPolls])
 
   const navigateToPoll = (pollId: number) => {
     props.history.push(`/cabinet/poll/${pollId}`)
@@ -62,21 +63,25 @@ const PollTemplates = (props: PollTemplatesProps) => {
     }
   }
 
-  const polls = React.useMemo(() => Object.values(props.polls.content), [props.polls])
-
-  const renderedPolls = polls.map((poll: PollTemplateItemType) => (
-    <PollTemplateItem
-      key={poll.id}
-      item={poll}
-      navigateToPoll={() => navigateToPoll(poll.id)}
-      deletePoll={() => props.deletePoll(poll.id)}
-      editPoll={() => setEditPollModalData({ isOpen: true, pid: poll.id })}
-      pollDeleting={props.pollDeleting}
-      pollEditing={props.pollEditing}
-      selected={selectedPolls.includes(poll.id)}
-      selectPoll={() => togglePollSelected(poll.id)}
-    />
-  ))
+  const renderedPolls = props.polls.meta.sortingOrder.map((pid: number) => {
+    const poll = _.get(props.polls.content, pid, null)
+    if (poll !== null) {
+      return (
+        <PollTemplateItem
+          key={poll.id}
+          item={poll}
+          navigateToPoll={() => navigateToPoll(poll.id)}
+          deletePoll={() => props.deletePoll(poll.id)}
+          editPoll={() => setEditPollModalData({ isOpen: true, pid: poll.id })}
+          pollDeleting={props.pollDeleting}
+          pollEditing={props.pollEditing}
+          selected={selectedPolls.includes(poll.id)}
+          selectPoll={() => togglePollSelected(poll.id)}
+        />
+      )
+    }
+    return ''
+  })
 
   return (
     <div className="templates-list">

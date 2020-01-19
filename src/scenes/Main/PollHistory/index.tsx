@@ -9,7 +9,6 @@ import PollHistoryModal from '../components/PollHistoryModal'
 import { PollHistoryItem, PollHistoryRecordedQuestions } from '#/store/types'
 import AnimatedPageTransition from '#/components/AnimatedPageTransition'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
-import _ from 'lodash'
 import './index.scss'
 
 interface PollHistoryProps extends RouteComponentProps<{ id: string | undefined }> {}
@@ -31,9 +30,9 @@ const PollHistory = (props: PollHistoryProps) => {
     isOpen: boolean
     data: PollHistoryRecordedQuestions
   }>({ isOpen: false, data: [] })
+  const { id } = props.match.params
 
   React.useEffect(() => {
-    const { id } = props.match.params
     if (id) {
       setPollHistoryLoading(true)
       getRequest(apiRoutes.pollHistory(parseInt(id), POLL_HISTORY_ITEMS_PER_PAGE, currentPage))
@@ -53,14 +52,17 @@ const PollHistory = (props: PollHistoryProps) => {
           setPollHistoryLoadingFailed(true)
         })
     }
-  }, [currentPage])
+  }, [id, currentPage])
 
-  const showChartData = (index: number) => {
-    const currentChartData = pollHistoryData[index].recordedQuestions
-    if (currentChartData.length) {
-      setCurrentPollChartModalData({ isOpen: true, data: currentChartData })
-    }
-  }
+  const showChartData = React.useCallback(
+    (index: number) => {
+      const currentChartData = pollHistoryData[index].recordedQuestions
+      if (currentChartData.length) {
+        setCurrentPollChartModalData({ isOpen: true, data: currentChartData })
+      }
+    },
+    [pollHistoryData]
+  )
 
   const closeChartModal = () => {
     if (currentPollChartModalData.isOpen) {
@@ -106,7 +108,7 @@ const PollHistory = (props: PollHistoryProps) => {
           </tr>
         )
       }),
-    [_pollHistoryItems]
+    [_pollHistoryItems, showChartData]
   )
 
   return (

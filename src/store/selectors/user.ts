@@ -1,5 +1,4 @@
 import { StoreRootState, UserState } from '#/store/types'
-import _ from 'lodash'
 import { createSelector } from 'reselect'
 
 type Props = {} | null

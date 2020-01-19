@@ -9,7 +9,7 @@ const Page = (props: PageProps) => {
   React.useEffect(() => {
     document.title = props.title
     return () => {}
-  }, [])
+  }, [props.title])
   return props.children
 }
 

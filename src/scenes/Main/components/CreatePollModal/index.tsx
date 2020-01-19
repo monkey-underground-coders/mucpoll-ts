@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { connect } from 'react-redux'
 import { createPoll } from '#/store/actions/poll'
 import PollQuestionBare from '../PollQuestionBare'

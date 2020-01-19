@@ -7,9 +7,8 @@ import { connect } from 'react-redux'
 import { StoreRootState } from '#/store/types'
 import userSelectors from '#/store/selectors/user'
 import Poller from './Poller'
-import './index.scss'
-import { wsRoutes } from '#/agent/api'
 import PollHistory from './PollHistory'
+import './index.scss'
 
 interface MainSceneProps extends RouteComponentProps {
   authenticated: boolean | null

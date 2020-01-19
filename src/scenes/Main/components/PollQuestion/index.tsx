@@ -1,6 +1,5 @@
 import React from 'react'
 import { QuestionContainerItem, QuestionHash, QuestionAnswerHash } from '#/store/types'
-import _ from 'lodash'
 import './index.scss'
 
 interface PollQuestionAnswerProps {
@@ -128,7 +127,7 @@ const PollQuestion = React.forwardRef((props: PollQuestionProps, ref) => {
           </div>
         )
       }),
-    [_answers, props.onAnswerCreate, props.onQuestionCreate, props.onAnswerDelete, props.onAnswerChange]
+    [answers, _answers, props, shouldFocusNextAnswerInputRightAway]
   )
 
   const renderedTitle = editMode ? (
