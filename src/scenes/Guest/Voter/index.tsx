@@ -167,9 +167,11 @@ class Voter extends React.Component<VoterProps, VoterState> {
   renderOnline = () => {
     const { voteInfo, votedOn } = this.state
     const currentQID: number = voteInfo.currentQid
-    const currentQuestion: Question = voteInfo.pollInfo.questions.filter((q: any) => q.id === currentQID)[0]
+    const currentQuestion: Question = voteInfo.pollInfo.questions.find((q: any) => q.id === currentQID)
     const questionTitle: string = currentQuestion.question
     const answerOptions: Array<AnswerOption> = currentQuestion.answerOptions
+    const answersResultCount = voteInfo.answers.reduce((acc: number, answer: any) => acc + answer.count, 0)
+
     return (
       <>
         {this.getWebSocketWrapper()}
@@ -178,6 +180,8 @@ class Voter extends React.Component<VoterProps, VoterState> {
           qid={currentQID}
           question={questionTitle}
           answers={answerOptions}
+          answersResult={voteInfo.answers}
+          answersResultCount={answersResultCount}
           voteMethod={this.vote}
           votingHistory={votedOn}
         />

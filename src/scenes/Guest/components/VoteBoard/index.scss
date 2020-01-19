@@ -12,3 +12,29 @@
     }
   }
 }
+
+.progress-bar {
+  &.bg-pb-custom-1 {
+    background-color: #8884d8;
+  }
+
+  &.bg-pb-custom-2 {
+    background-color: #82ca9d;
+  }
+
+  &.bg-pb-custom-3 {
+    background-color: #b45cc3;
+  }
+
+  &.bg-pb-custom-4 {
+    background-color: #9816f4;
+  }
+
+  &.bg-pb-custom-5 {
+    background-color: #ff7844;
+  }
+
+  &.bg-pb-custom-6 {
+    background-color: #c35c61;
+  }
+}

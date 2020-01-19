@@ -64,6 +64,12 @@ class Poller extends React.Component<PollerProps, PollerState> {
   toggleSharePollModalOpen = () =>
     this.setState((prevState: PollerState) => ({ sharePollModalOpen: !prevState.sharePollModalOpen }))
 
+  componentWillUnmount() {
+    if (this.state.exchangeStatus === ExchangeStatus.ONLINE) {
+      this.closeVote()
+    }
+  }
+
   stateConnecting = () => {
     const { voteId } = this.state
     this.sendMessage(stomp.subscribe(`/topic/${voteId}`))
@@ -235,7 +241,7 @@ class Poller extends React.Component<PollerProps, PollerState> {
               Share link:
               <button
                 id="copyToClipboardLink"
-                className="btn btn-text-link btn-text-link__big"
+                className="btn btn-link btn-text-link__big"
                 onClick={e => copyToClipBoardEvent(e, link)}
               >
                 <i className="far fa-copy"></i> {link}
@@ -258,8 +264,8 @@ class Poller extends React.Component<PollerProps, PollerState> {
           {this.getWebSocketWrapper()}
           {this.getLinks()}
 
-          <button className="btn btn-primary" onClick={this.goToOnline}>
-            Start!
+          <button className="btn btn-primary mt-3" onClick={this.goToOnline}>
+            Start Poll
           </button>
         </div>
       </AnimatedPageTransition>

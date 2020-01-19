@@ -36,7 +36,7 @@ export const parseDate = (date: string) => {
 }
 
 export const generateChartBarColor = (index: number) => {
-  const chartBarColors = ['#8884d8', '#82ca9d', '#b45cc3']
+  const chartBarColors = ['#8884d8', '#82ca9d', '#b45cc3', '#9816f4', '#ff7844', '#c35c61']
   return chartBarColors[index % chartBarColors.length]
 }
 
