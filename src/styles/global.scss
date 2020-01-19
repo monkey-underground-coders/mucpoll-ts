@@ -216,9 +216,7 @@ canvas {
 
 .mask-appear {
   // transform: translateY(-10%);
-  transform: translateX(-75%);
   opacity: 0;
-  transition: transform 0s ease-in;
 }
 
 .mask-appear.mask-appear-active {

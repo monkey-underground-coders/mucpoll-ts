@@ -46,7 +46,9 @@ const VoteBoard = (props: VoteBoardProps) => {
                         toggle={() => props.voteMethod(props.qid, a.id)}
                       />
                     ) : (
-                      answerResult && (
+                      answerResult !== undefined &&
+                      answerResult.count !== undefined &&
+                      props.answersResultCount !== undefined && (
                         <AnimatedPageTransition className="flex-vertically-centered w-100">
                           <div className="w-100">
                             <div>{a.answer}</div>

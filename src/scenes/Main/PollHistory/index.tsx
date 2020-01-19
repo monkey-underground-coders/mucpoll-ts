@@ -112,7 +112,7 @@ const PollHistory = (props: PollHistoryProps) => {
   )
 
   return (
-    <AnimatedPageTransition>
+    <AnimatedPageTransition top={true}>
       <div className="box">
         {!pollHistoryLoading && (
           <div className="box__header">

@@ -15,7 +15,7 @@ const Cabinet = (props: CabinetProps) => {
   }
 
   return (
-    <AnimatedPageTransition>
+    <AnimatedPageTransition top={true}>
       <div className="cabinet">
         <div className="cabinet__inner">
           <div className="d-flex justify-content-between align-items-center">
