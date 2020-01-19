@@ -42,6 +42,8 @@ const CreatePollModal = (props: CreatePollModalProps) => {
     return Object.values(questions).map((question: QuestionContainerItem) => ({
       title: question.title,
       answers: Object.values(question.answers)
+        .map((question: string) => question.trim())
+        .filter(q => q)
     }))
   }
 
