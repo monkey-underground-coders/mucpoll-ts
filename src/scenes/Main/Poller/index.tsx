@@ -3,16 +3,17 @@ import stomp from '#/utils/stomp'
 import Websocket from 'react-websocket'
 import QRCode from 'qrcode.react'
 import { selfUrl, wsRoutes } from '#/agent/api'
-import { getLocalStorageItem, copyToClipBoardEvent } from '#/utils/functions'
+import { copyToClipBoardEvent, getCurrentSeconds, getLocalStorageItem } from '#/utils/functions'
 import VoteStats from '../VoteStats'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { Question, AnswerOption } from '#/store/types'
-import { UncontrolledPopover, PopoverBody } from 'reactstrap'
+import { AnswerOption, Question } from '#/store/types'
+import { PopoverBody, UncontrolledPopover } from 'reactstrap'
 import Loader from '#/components/Loader'
 import SharePollModal from '../components/SharePollModal'
 import AnimatedPageTransition from '#/components/AnimatedPageTransition'
 
-interface PollerProps extends RouteComponentProps<{ id: string | undefined }> {}
+interface PollerProps extends RouteComponentProps<{ id: string | undefined }> {
+}
 
 interface PollerState {
   exchangeStatus: number
@@ -49,6 +50,7 @@ class Poller extends React.Component<PollerProps, PollerState> {
       this.stateOnline(data)
     }
   }
+  lastWriteHeartbeat = getCurrentSeconds()
 
   constructor(props: PollerProps) {
     super(props)
@@ -143,7 +145,17 @@ class Poller extends React.Component<PollerProps, PollerState> {
     const { exchangeStatus } = this.state
     if (data === '\n') {
       this.sendMessage('\n')
-    } else if (this.transitions.hasOwnProperty(exchangeStatus)) {
+      return
+    } else if ((
+        this.state.exchangeStatus === ExchangeStatus.ONLINE ||
+        this.state.exchangeStatus === ExchangeStatus.SHOWING_LINK
+      ) &&
+      getCurrentSeconds() - this.lastWriteHeartbeat > stomp.defaultWriteHeartbeatInterval) {
+      this.sendMessage('\n')
+      this.lastWriteHeartbeat = getCurrentSeconds()
+    }
+
+    if (this.transitions.hasOwnProperty(exchangeStatus)) {
       this.transitions[exchangeStatus](data)
     }
   }
@@ -277,7 +289,7 @@ class Poller extends React.Component<PollerProps, PollerState> {
       <AnimatedPageTransition>
         <div>
           {this.getWebSocketWrapper()}
-          <Loader />
+          <Loader/>
         </div>
       </AnimatedPageTransition>
     )

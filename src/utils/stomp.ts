@@ -30,4 +30,6 @@ const send = (path: string, msg: string = '', contentType = 'application/json') 
   return message
 }
 
-export default { connect, subscribe, send, getJson }
+const defaultWriteHeartbeatInterval = 20
+
+export default { connect, subscribe, send, getJson, defaultWriteHeartbeatInterval }

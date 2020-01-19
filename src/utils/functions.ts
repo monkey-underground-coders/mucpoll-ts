@@ -46,3 +46,7 @@ export const reorder = (list: any, startIndex: number, endIndex: number) => {
   result.splice(endIndex, 0, removed)
   return result
 }
+
+export const getCurrentSeconds = () => {
+  return new Date().getTime() / 1000
+}
