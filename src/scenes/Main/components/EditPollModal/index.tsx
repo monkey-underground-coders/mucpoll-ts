@@ -106,12 +106,7 @@ const EditPollModal = (props: EditPollModalProps) => {
     })
   }
 
-  // TODO: Fix a bug when deleting answer
   const onAnswerDelete = (questionHash: QuestionHash, answerHash: QuestionAnswerHash) => {
-    console.log('onAnswerDelete')
-    console.log('q', newlyCreatedQuestions[questionHash])
-    console.log('a', newlyCreatedQuestions[questionHash].answers[answerHash])
-    console.log('prevstate', newlyCreatedQuestions)
     setNewlyCreatedQuestions({
       ...newlyCreatedQuestions,
       [questionHash]: {
@@ -119,7 +114,6 @@ const EditPollModal = (props: EditPollModalProps) => {
         answers: _.omit(newlyCreatedQuestions[questionHash].answers, [answerHash])
       }
     })
-    console.log('nextState', newlyCreatedQuestions)
   }
 
   const onAnswerChange = (questionHash: QuestionHash, answerHash: QuestionAnswerHash, nextValue: string) => {

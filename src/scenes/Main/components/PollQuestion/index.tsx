@@ -105,32 +105,27 @@ const PollQuestion = React.forwardRef((props: PollQuestionProps, ref) => {
   }
 
   const _answers = React.useMemo(() => Object.keys(answers), [answers])
-
-  const renderedAnswers = React.useMemo(
-    () =>
-      _answers.map((hash: string, index: number) => {
-        const answer = answers[hash]
-        return (
-          <div className="d-flex align-items-center px-2" key={index}>
-            <span>{index + 1}.</span>
-            <div className="ml-2 w-100">
-              <PollQuestionAnswer
-                key={`ans${hash}`}
-                hash={hash}
-                onChange={props.onAnswerChange}
-                onDelete={() => props.onAnswerDelete(hash)}
-                createNextAnswer={props.onAnswerCreate}
-                createNextQuestion={props.onQuestionCreate}
-                answer={answer}
-                shouldFocusInputRightAway={shouldFocusNextAnswerInputRightAway}
-                setShouldFocusInputRightAway={setShouldFocusNextAnswerInputRightAway}
-              />
-            </div>
-          </div>
-        )
-      }),
-    [_answers]
-  )
+  const _renderedAnswers = _answers.map((hash: string, index: number) => {
+    const answer = answers[hash]
+    return (
+      <div className="d-flex align-items-center px-2" key={index}>
+        <span>{index + 1}.</span>
+        <div className="ml-2 w-100">
+          <PollQuestionAnswer
+            key={`ans${hash}`}
+            hash={hash}
+            onChange={props.onAnswerChange}
+            onDelete={() => props.onAnswerDelete(hash)}
+            createNextAnswer={props.onAnswerCreate}
+            createNextQuestion={props.onQuestionCreate}
+            answer={answer}
+            shouldFocusInputRightAway={shouldFocusNextAnswerInputRightAway}
+            setShouldFocusInputRightAway={setShouldFocusNextAnswerInputRightAway}
+          />
+        </div>
+      </div>
+    )
+  })
 
   const renderedTitle = editMode ? (
     <input
@@ -187,7 +182,7 @@ const PollQuestion = React.forwardRef((props: PollQuestionProps, ref) => {
           </div>
         </div>
 
-        <div className="question-item__layout__answers">{renderedAnswers}</div>
+        <div className="question-item__layout__answers">{_renderedAnswers}</div>
       </div>
     </div>
   )
