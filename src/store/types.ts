@@ -47,6 +47,7 @@ export interface PollTemplateItemType {
   }
   launchedCount: number
   tags: Array<any>
+  createdAt: string
 }
 
 export type PollHistoryRecordedQuestions = Array<{
@@ -79,6 +80,8 @@ export interface PollState {
   polls: Polls
   pollsLoading: boolean
   pollsLoadingFailed: boolean
+  pollsDeleting: boolean
+  pollsDeletingFailed: boolean
   pollCreating: boolean
   pollCreatingFailed: boolean
   pollDeleting: boolean

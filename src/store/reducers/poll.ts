@@ -12,6 +12,9 @@ const initialState: PollState = {
   // Poll fetching
   pollsLoading: false,
   pollsLoadingFailed: false,
+  // Polls deleting
+  pollsDeleting: false,
+  pollsDeletingFailed: false,
   // Poll creating
   pollCreating: false,
   pollCreatingFailed: false,
@@ -161,6 +164,25 @@ export const pollReducer = createReducer<PollState, Action>(
       ...state,
       pollDeleting: false,
       pollDeletingFailed: true
+    }),
+
+    [ActionTypes.POLL.DELETE_POLLS_START]: (state: PollState, action: any) => ({
+      ...state,
+      pollsDeleting: true,
+      pollsDeletingFailed: false
+    }),
+
+    [ActionTypes.POLL.DELETE_POLLS_SUCCESS]: (state: PollState, action: any) => ({
+      ...state,
+      polls: { ...state.polls, content: _.omit(state.polls.content, action.payload.pids) },
+      pollsDeleting: false,
+      pollsDeletingFailed: false
+    }),
+
+    [ActionTypes.POLL.DELETE_POLLS_FAIL]: (state: PollState, action: any) => ({
+      ...state,
+      pollsDeleting: false,
+      pollsDeletingFailed: true
     })
   },
   initialState

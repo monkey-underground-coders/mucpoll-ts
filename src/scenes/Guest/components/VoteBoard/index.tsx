@@ -20,8 +20,8 @@ const VoteBoard = (props: VoteBoardProps) => {
     <div className="box voteboard-item">
       <div className="box__header">{props.question}</div>
       <div className="box__body">
-        {props.answers.map(a => (
-          <div key={a.answer} className="form-group">
+        {props.answers.map((a, index) => (
+          <div key={`${a.answer}${index}`} className="form-group">
             <Checkbox
               value={a.answer}
               label={a.answer}

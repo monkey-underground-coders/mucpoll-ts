@@ -1,24 +1,27 @@
 import React from 'react'
 import PollTemplateItem from '../../components/PollTemplateItem'
 import { PollTemplateItemType, StoreRootState, Polls } from '#/store/types'
-import { getPolls, deletePoll, editPoll } from '#/store/actions/poll'
+import { getPolls, deletePoll, deletePolls } from '#/store/actions/poll'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router'
 import Loader from '#/components/Loader'
 import EditPollModal from '../../components/EditPollModal'
-import './index.scss'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
+import './index.scss'
 
 interface PollTemplatesProps extends RouteComponentProps {
   polls: Polls
   pollsLoading: boolean
   pollsLoadingFailed: boolean
+  pollsDeleting: boolean
+  pollsDeletingFailed: boolean
   pollDeleting: boolean
   pollDeletingFailed: boolean
   pollEditing: boolean
   pollEditingFailed: boolean
   getPolls: (size: number, page: number) => Promise<any>
   deletePoll: (pid: number) => Promise<any>
+  deletePolls: (pids: number[]) => Promise<any>
 }
 
 const TEMPLATES_SIZE = 10
@@ -48,6 +51,14 @@ const PollTemplates = (props: PollTemplatesProps) => {
     } else {
       // Otherwise, add to selected
       setSelectedPolls([...selectedPolls, pid])
+    }
+  }
+
+  const deleteSelectedPolls = () => {
+    if (selectedPolls.length && !props.pollsDeleting) {
+      props.deletePolls(selectedPolls).then(() => {
+        setSelectedPolls([])
+      })
     }
   }
 
@@ -86,7 +97,7 @@ const PollTemplates = (props: PollTemplatesProps) => {
       )}
 
       {props.polls.settings.totalPages !== undefined && (
-        <div className="mt-4 text-right">
+        <div className="mt-4 flex-right">
           <Pagination aria-label="Poll templates pagination">
             <PaginationItem>
               <PaginationLink
@@ -116,10 +127,16 @@ const PollTemplates = (props: PollTemplatesProps) => {
         </div>
       )}
 
-      <div className="animated-div text-right mt-4" style={{ opacity: selectedPolls.length ? 1 : 0 }}>
-        <button className="btn btn-danger">
-          <i className="fas fa-trash"></i>
-          <span className="ml-2">Delete ({selectedPolls.length})</span>
+      <div className="animated-div text-right mt-2" style={{ opacity: selectedPolls.length ? 1 : 0 }}>
+        <button className="btn btn-danger" onClick={deleteSelectedPolls} disabled={props.pollsDeleting}>
+          {props.pollsDeleting ? (
+            <Loader small={true} />
+          ) : (
+            <>
+              <i className="fas fa-trash"></i>
+              <span className="ml-2">Delete ({selectedPolls.length})</span>
+            </>
+          )}
         </button>
       </div>
     </div>
@@ -132,11 +149,13 @@ export default withRouter(
       polls: store.poll.polls,
       pollsLoading: store.poll.pollsLoading,
       pollsLoadingFailed: store.poll.pollsLoadingFailed,
+      pollsDeleting: store.poll.pollsDeleting,
+      pollsDeletingFailed: store.poll.pollsDeletingFailed,
       pollDeleting: store.poll.pollDeleting,
       pollDeletingFailed: store.poll.pollDeletingFailed,
       pollEditing: store.poll.pollEditing,
       pollEditingFailed: store.poll.pollEditingFailed
     }),
-    { getPolls, deletePoll }
+    { getPolls, deletePoll, deletePolls }
   )(PollTemplates)
 )

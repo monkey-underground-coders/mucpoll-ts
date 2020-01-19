@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { PollTemplateItemType } from '#/store/types'
 import Loader from '#/components/Loader'
 import Checkbox from '#/components/Checkbox'
+import { parseDate } from '#/utils/functions'
 
 interface PollTemplateItemProps {
   item: PollTemplateItemType
@@ -46,7 +47,7 @@ const PollTemplateItem = (props: PollTemplateItemProps) => {
           </div>
           <div className="templates-list__item__info__date">
             <div className="templates-list__item__info__caption">Created</div>
-            <div className="templates-list__item__info__title">06 March 2019</div>
+            <div className="templates-list__item__info__title">{parseDate(props.item.createdAt)}</div>
           </div>
         </div>
 

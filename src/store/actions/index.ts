@@ -24,6 +24,10 @@ export const ActionTypes = {
     DELETE_POLL_SUCCESS: `${ActionPrefixes.poll}/DELETE_POLL_SUCCESS`,
     DELETE_POLL_FAIL: `${ActionPrefixes.poll}/DELETE_POLL_FAIL`,
 
+    DELETE_POLLS_START: `${ActionPrefixes.poll}/DELETE_POLLS_START`,
+    DELETE_POLLS_SUCCESS: `${ActionPrefixes.poll}/DELETE_POLLS_SUCCESS`,
+    DELETE_POLLS_FAIL: `${ActionPrefixes.poll}/DELETE_POLLS_FAIL`,
+
     EDIT_POLL_START: `${ActionPrefixes.poll}/EDIT_POLL_START`,
     EDIT_POLL_SUCCESS: `${ActionPrefixes.poll}/EDIT_POLL_SUCCESS`,
     EDIT_POLL_FAIL: `${ActionPrefixes.poll}/EDIT_POLL_FAIL`,

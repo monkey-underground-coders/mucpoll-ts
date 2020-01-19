@@ -9,7 +9,6 @@ interface PollQuestionBareProps {
   onQuestionDelete: (hash: QuestionHash) => void
   onQuestionChange: (hash: QuestionHash, value: string) => void
   toggleQuestionEditMode: (hash: QuestionHash) => void
-  getQuestionEditMode: (hash: QuestionHash) => boolean
   onAnswerCreate: (hash: QuestionHash) => void
   onAnswerDelete: (hash: QuestionHash, answerHash: QuestionAnswerHash) => void
   onAnswerChange: (hash: QuestionHash, answerHash: QuestionAnswerHash, nextValue: string) => void
@@ -18,7 +17,6 @@ interface PollQuestionBareProps {
 
 const PollQuestionBare = (props: PollQuestionBareProps) => {
   const questionsList = React.useMemo(() => Object.keys(props.container), [props.container])
-
   const renderedQuestions = React.useMemo(() => {
     if (questionsList.length) {
       return questionsList.map((questionHash: QuestionHash, index: number) => {
@@ -46,7 +44,6 @@ const PollQuestionBare = (props: PollQuestionBareProps) => {
                   onAnswerCreate={() => props.onAnswerCreate(questionHash)}
                   onAnswerDelete={(answerHash: QuestionAnswerHash) => props.onAnswerDelete(questionHash, answerHash)}
                   toggleQuestionEditMode={() => props.toggleQuestionEditMode(questionHash)}
-                  questionEditMode={props.getQuestionEditMode(questionHash)}
                 />
               </div>
             )}

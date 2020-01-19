@@ -13,6 +13,7 @@ import {
 } from '#/store/types'
 import _ from 'lodash'
 import { reorder } from '#/utils/functions'
+import Loader from '#/components/Loader'
 
 interface CreatePollModalProps {
   isOpen: boolean
@@ -27,7 +28,7 @@ const CreatePollModal = (props: CreatePollModalProps) => {
 
   const createPoll = (event: React.FormEvent) => {
     event.preventDefault()
-    if (pollTitle) {
+    if (pollTitle && !props.pollCreating) {
       const questions = constructQuestionsToRequest()
       props.createPoll(pollTitle, questions).then((json: any) => {
         props.toggleModal()
@@ -70,12 +71,8 @@ const CreatePollModal = (props: CreatePollModalProps) => {
   const toggleQuestionEditMode = (questionHash: QuestionHash) => {
     setQuestions({
       ...questions,
-      [questionHash]: { ...questions[questionHash], editMode: !questions[questionHash].editMode }
+      [questionHash]: { ...questions[questionHash], editMode: !questions[questionHash].editMode as boolean }
     })
-  }
-
-  const getQuestionEditMode = (questionHash: QuestionHash) => {
-    return questions[questionHash].editMode as boolean
   }
 
   /**
@@ -90,7 +87,8 @@ const CreatePollModal = (props: CreatePollModalProps) => {
       ...questions,
       [questionHash]: {
         ...questions[questionHash],
-        answers: { ...questions[questionHash].answers, [createdHash]: '' }
+        answers: { ...questions[questionHash].answers, [createdHash]: '' },
+        editMode: false
       }
     })
   }
@@ -152,7 +150,6 @@ const CreatePollModal = (props: CreatePollModalProps) => {
           <div className="mt-2">
             <PollQuestionBare
               toggleQuestionEditMode={toggleQuestionEditMode}
-              getQuestionEditMode={getQuestionEditMode}
               onQuestionCreate={onQuestionCreate}
               onQuestionChange={onQuestionChange}
               onQuestionDelete={onQuestionDelete}
@@ -170,7 +167,7 @@ const CreatePollModal = (props: CreatePollModalProps) => {
           </button>
 
           <button className="btn btn-primary" type="button" onClick={createPoll} disabled={props.pollCreating}>
-            Create
+            {props.pollCreating ? <Loader small={true} /> : 'Create'}
           </button>
         </ModalFooter>
       </form>

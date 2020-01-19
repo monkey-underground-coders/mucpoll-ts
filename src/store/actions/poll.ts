@@ -85,6 +85,24 @@ export const deletePoll = (pid: number) => (
     })
 }
 
+export const deletePolls = (pids: number[]) => (
+  dispatch: ThunkDispatch<StoreRootState, any, Action>,
+  getState: () => StoreRootState
+) => {
+  dispatch({ type: ActionTypes.POLL.DELETE_POLLS_START })
+  return Promise.all(pids.map((pid: number) => deleteRequest(apiRoutes.poll(pid))))
+    .then(() => {
+      dispatch({
+        type: ActionTypes.POLL.DELETE_POLLS_SUCCESS,
+        payload: { pids: pids.map((pid: number) => pid.toString()) }
+      })
+    })
+    .catch(err => {
+      console.warn(err)
+      dispatch({ type: ActionTypes.POLL.DELETE_POLLS_FAIL })
+    })
+}
+
 export const editPoll = (
   pid: number,
   name: string,

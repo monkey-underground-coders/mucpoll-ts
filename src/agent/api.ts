@@ -23,7 +23,8 @@ export const apiRoutes = {
   createPoll: getUrl(`poll/create`),
   poll: (pid: number) => getUrl(`poll/${pid}`),
   pollQuestion: (pid: number) => getUrl(`poll/${pid}/question`),
-  pollHistory: (pid: number) => getUrl(`poll/${pid}/history`)
+  pollHistory: (pid: number, size: number = 10, page: number = 0) =>
+    getUrl(`poll/${pid}/history?size=${size}&page=${page}`)
 }
 
 export const wsRoutes = {

@@ -95,10 +95,6 @@ const EditPollModal = (props: EditPollModalProps) => {
     })
   }
 
-  const getQuestionEditMode = (questionHash: QuestionHash) => {
-    return newlyCreatedQuestions[questionHash].editMode as boolean
-  }
-
   const onAnswerCreate = (questionHash: QuestionHash) => {
     const createdHash = `QuestionAnswer_${new Date().getTime()}`
     setNewlyCreatedQuestions({
@@ -110,14 +106,20 @@ const EditPollModal = (props: EditPollModalProps) => {
     })
   }
 
+  // TODO: Fix a bug when deleting answer
   const onAnswerDelete = (questionHash: QuestionHash, answerHash: QuestionAnswerHash) => {
+    console.log('onAnswerDelete')
+    console.log('q', newlyCreatedQuestions[questionHash])
+    console.log('a', newlyCreatedQuestions[questionHash].answers[answerHash])
+    console.log('prevstate', newlyCreatedQuestions)
     setNewlyCreatedQuestions({
       ...newlyCreatedQuestions,
       [questionHash]: {
         ...newlyCreatedQuestions[questionHash],
-        answers: _.omit(newlyCreatedQuestions[questionHash].answers, answerHash)
+        answers: _.omit(newlyCreatedQuestions[questionHash].answers, [answerHash])
       }
     })
+    console.log('nextState', newlyCreatedQuestions)
   }
 
   const onAnswerChange = (questionHash: QuestionHash, answerHash: QuestionAnswerHash, nextValue: string) => {
@@ -223,7 +225,6 @@ const EditPollModal = (props: EditPollModalProps) => {
             <div className="mt-2">
               <PollQuestionBare
                 toggleQuestionEditMode={toggleQuestionEditMode}
-                getQuestionEditMode={getQuestionEditMode}
                 onQuestionCreate={onQuestionCreate}
                 onQuestionChange={onQuestionChange}
                 onQuestionDelete={onQuestionDelete}

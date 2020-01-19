@@ -80,7 +80,6 @@ interface PollQuestionProps extends React.ComponentProps<any> {
   hash: QuestionHash
   readonly?: boolean
   question: QuestionContainerItem
-  questionEditMode: boolean
   onAnswerCreate: () => void
   onAnswerDelete: (answerHash: QuestionAnswerHash) => void
   onAnswerChange: (answerHash: QuestionAnswerHash, value: string) => void
@@ -92,43 +91,48 @@ interface PollQuestionProps extends React.ComponentProps<any> {
 
 const PollQuestion = React.forwardRef((props: PollQuestionProps, ref) => {
   const [shouldFocusNextAnswerInputRightAway, setShouldFocusNextAnswerInputRightAway] = React.useState<boolean>(false)
-  const { title, answers } = props.question
+  const { title, answers, editMode } = props.question
 
   const toggleEdit = () => {
-    !!title && props.toggleQuestionEditMode()
+    if (title) props.toggleQuestionEditMode()
   }
 
   const onQuestionInputKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && title) {
-      toggleEdit()
       props.onAnswerCreate()
       setShouldFocusNextAnswerInputRightAway(true)
     }
   }
 
-  const renderedAnswers = Object.keys(answers).map((hash: string, index: number) => {
-    const answer = answers[hash]
-    return (
-      <div className="d-flex align-items-center px-2" key={index}>
-        <span>{index + 1}.</span>
-        <div className="ml-2 w-100">
-          <PollQuestionAnswer
-            key={`ans${hash}`}
-            hash={hash}
-            onChange={props.onAnswerChange}
-            onDelete={() => props.onAnswerDelete(hash)}
-            createNextAnswer={props.onAnswerCreate}
-            createNextQuestion={props.onQuestionCreate}
-            answer={answer}
-            shouldFocusInputRightAway={shouldFocusNextAnswerInputRightAway}
-            setShouldFocusInputRightAway={setShouldFocusNextAnswerInputRightAway}
-          />
-        </div>
-      </div>
-    )
-  })
+  const _answers = React.useMemo(() => Object.keys(answers), [answers])
 
-  const renderedTitle = props.questionEditMode ? (
+  const renderedAnswers = React.useMemo(
+    () =>
+      _answers.map((hash: string, index: number) => {
+        const answer = answers[hash]
+        return (
+          <div className="d-flex align-items-center px-2" key={index}>
+            <span>{index + 1}.</span>
+            <div className="ml-2 w-100">
+              <PollQuestionAnswer
+                key={`ans${hash}`}
+                hash={hash}
+                onChange={props.onAnswerChange}
+                onDelete={() => props.onAnswerDelete(hash)}
+                createNextAnswer={props.onAnswerCreate}
+                createNextQuestion={props.onQuestionCreate}
+                answer={answer}
+                shouldFocusInputRightAway={shouldFocusNextAnswerInputRightAway}
+                setShouldFocusInputRightAway={setShouldFocusNextAnswerInputRightAway}
+              />
+            </div>
+          </div>
+        )
+      }),
+    [_answers]
+  )
+
+  const renderedTitle = editMode ? (
     <input
       type="text"
       placeholder="Question title"
@@ -159,7 +163,7 @@ const PollQuestion = React.forwardRef((props: PollQuestionProps, ref) => {
               <span className="ml-1">Answer</span>
             </button>
 
-            {props.questionEditMode ? (
+            {editMode ? (
               <button type="button" className="btn-list btn" onClick={toggleEdit}>
                 <i className="fas fa-check"></i>
                 <span className="ml-1">Save</span>
