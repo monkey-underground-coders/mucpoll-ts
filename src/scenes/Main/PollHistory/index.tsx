@@ -93,7 +93,7 @@ const PollHistory = (props: PollHistoryProps) => {
         }, 0)
         return (
           <tr className="poll-history-item" key={index}>
-            <td className="poll-history-item__index">{index + 1}.</td>
+            <td className="poll-history-item__index">{currentPage * 10 + (index + 1)}.</td>
             <td className="poll-history-item__date">
               {parseDate(historyItem.startedAt)} - {parseDate(historyItem.recordedAt)}
             </td>
