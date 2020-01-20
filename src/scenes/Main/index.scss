@@ -6,6 +6,10 @@
     min-height: 100vh;
   }
 
+  &__inner__navbaropen {
+    min-height: calc(100vh + 93px);
+  }
+
   background: rgba(246, 250, 251, 1);
 }
 

@@ -26,7 +26,7 @@ const MainScene = (props: MainSceneProps) => {
 
   return (
     <div className="main">
-      <div className="main__inner">
+      <div className={`main__inner ${!navbarOpen ? 'main__inner__navbaropen' : ''}`}>
         <Navbar open={navbarOpen} toggleOpen={() => setNavbarOpen(!navbarOpen)} />
 
         <div className="layout container">
